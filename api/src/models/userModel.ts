@@ -39,20 +39,20 @@ class UserModel {
     confirmed: {
       type:Boolean
     },
-    confirmedCode: {
+    confirmation_code: {
       type:String
     }
   });
 
   protected readonly userModel = mongoose.models.user || mongoose.model('user', this.userSchema);
 
-  protected createNewUser(userData:user) {
+  protected createUser(userData:user) {
     return new this.userModel({
       ...userData,
       profile_photo:'',
       token:'',
       confirmed:false,
-      confirmedCode:''
+      confirmation_code:''
     });
   }
 }

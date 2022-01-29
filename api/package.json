@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon app.ts",
     "test": "jest",
+    "test_with_debug": "jest --detectOpenHandles",
     "init": "init",
     "create-model": "create-model",
     "create-repo": "create-repo",
@@ -19,9 +20,12 @@
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.0",
+    "@types/supertest": "^2.0.11",
     "clean-architecture-cli-ging": "^1.2.0",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
+    "supertest": "^6.2.2",
     "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
@@ -31,6 +35,8 @@
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.8"
+    "mongoose": "^6.1.8",
+    "redis": "^4.0.2",
+    "simple-validator-node": "^1.3.0"
   }
 }
