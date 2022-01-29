@@ -14,6 +14,12 @@ class Base {
     const key = `user-${user._id}`;
     await this.cache.set(key, user);
   }
+
+  protected async deleteFromCache(id:string) {
+    await this.cache.connect();
+    await this.cache.deleteOne(`user-${id}`);
+    await this.cache.quit();
+  }
 }
 
 export default Base;

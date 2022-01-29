@@ -35,11 +35,13 @@ class UserRepository extends UserModel {
   public async confirmEmail(user:any) {
     user.confirmed = true;
     await user.save();
+    return user;
   }
 
   public async logout(user:any) {
     user.token = '';
     await user.save();
+    return user;
   }
 
   public async findByEmailOrUsername(emailOrUsername:string) {

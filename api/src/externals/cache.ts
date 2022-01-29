@@ -24,6 +24,10 @@ class Cache {
     if(value) return JSON.parse(value);
   }
 
+  public async deleteOne(key:string) {
+    await this.client.del(key);
+  }
+
   public async deleteAll() {
     await this.client.FLUSHDB();
   }
