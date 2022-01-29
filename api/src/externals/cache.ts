@@ -6,19 +6,26 @@ class Cache {
     url:process.env.REDIS_URL!
   });
 
-  public async set(key:string, value:object) {
+  public async connect() {
     await this.client.connect();
-    const valueInString = JSON.stringify(value);
-    await this.client.set(key, valueInString);
-    await this.client.bgSave();
+  }
+
+  public async quit() {
     await this.client.quit();
   }
 
+  public async set(key:string, value:object) {
+    const valueInString = JSON.stringify(value);
+    await this.client.set(key, valueInString);
+  }
+
   public async get(key:string) {
-    await this.client.connect();
     const value = await this.client.get(key);
     if(value) return JSON.parse(value);
-    await this.client.quit();
+  }
+
+  public async deleteAll() {
+    await this.client.FLUSHDB();
   }
 }
 

@@ -1,21 +1,18 @@
 import { user } from "../../../models/userModel";
-import UserRepository from "../../../repositories/userRepository";
 import Validator from 'simple-validator-node';
 import exception from "../../../util/exception";
-import Cache from "../../../externals/cache";
+import Base from "../base";
 
-class UserCreateUseCase { 
+class UserCreateUseCase extends Base { 
 
-  private readonly user = new UserRepository();
   private readonly validator = new Validator();
-  private readonly cache = new Cache();
   
   public async create(userData:user) {
     this.validate(userData);
     await this.verifyIfEmailAlreadyExists(userData.email);
     await this.verifyIfUsernameAlreadyExists(userData.username);
     const createdUser = await this.user.create(userData);
-    await this.saveUserInCache(createdUser);
+    await this.saveUserDataInChache(createdUser);
     if(process.env.MODE! === 'dev') return this.userData(createdUser);
   }
 
@@ -53,17 +50,10 @@ class UserCreateUseCase {
     if(usernameExists) throw exception('Esse nome de usuário já está sendo utilizado');
   }
 
-  private async saveUserInCache(user:any) {
-    const key = `user-${user._id}`;
-    await this.cache.set(key, {
-      _id:user._id,
-      email:user.email,
-      username:user.username,
-      profile_photo:user.profile_photo,
-      token:user.token,
-      confirmed:user.confirmed,
-      confirmation_code:user.confirmation_code
-    });
+  private async saveUserDataInChache(user:any) {
+    await this.cache.connect();
+    await this.saveUserInCache(user);
+    await this.cache.quit();
   }
 
   private userData(user:any) {

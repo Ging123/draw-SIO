@@ -32,6 +32,16 @@ class UserRepository extends UserModel {
     return { text:token, hash:hashToken };
   }
 
+  public async confirmEmail(user:any) {
+    user.confirmed = true;
+    await user.save();
+  }
+
+  public async logout(user:any) {
+    user.token = '';
+    await user.save();
+  }
+
   public async findByEmailOrUsername(emailOrUsername:string) {
     return await this.userModel.findOne({ 
       $or:[{ email: emailOrUsername }, { username:emailOrUsername }]
@@ -44,6 +54,10 @@ class UserRepository extends UserModel {
 
   public async findByUsername(username:string) {
     return await this.userModel.findOne({ username:username });
+  }
+
+  public async findById(id:string) {
+    return await this.userModel.findById(id);
   }
 
   public async deleteByEmail(email:string) {
