@@ -5,7 +5,7 @@ const user = new UserFindByTokenUseCase();
 
 async function authUser(req:any, res:any, next:() => void) {
   try {
-    const sentToken = req.headers["Authorization"]!;
+    const sentToken = req.headers["Authorization"] || req.headers["authorization"];
     req.user = await user.findUserByToken(sentToken);
     next();
   }

@@ -32,7 +32,7 @@ async function deleteAllFromCache() {
   await cache.quit();
 }
 
-test('Test: ', async () => {
+test('Test: Send a token that have an email that isnt confirmed', async () => {
   try {
     await user.findUserByToken(token);
   }
