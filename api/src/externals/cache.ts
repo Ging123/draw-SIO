@@ -10,6 +10,7 @@ class Cache {
     await this.client.connect();
     const valueInString = JSON.stringify(value);
     await this.client.set(key, valueInString);
+    await this.client.bgSave();
     await this.client.quit();
   }
 
