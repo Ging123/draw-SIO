@@ -12,7 +12,7 @@ class UserFindByTokenUseCase extends Base {
     return user;
   }
 
-  private async getUserById(id:string) {
+  protected async getUserById(id:string) {
     let user:any;
     user = await this.getUserInCache(id);
     if(user) return user;
