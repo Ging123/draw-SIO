@@ -73,19 +73,6 @@ class UserCreateUseCase extends Base {
     await this.cache.quit();
   }
 
-  private sendCodeToConfirmEmail(data:any) {
-    const code = data.confirmationCode;
-    const confirmUrl = `${process.env.API_URL!}user/email/confirm/${code}`;
-    this.emailSender.send({
-      to:data.user.email,
-      subject:'Confirm your email',
-      text:`<h1>Hello, confirm your account</h1>
-      <p>Click right 
-      <a target="_blanket" href="${confirmUrl}">here</a> 
-      to confirm your account</p>`
-    });
-  }
-
   private userData(user:any) {
     return {
       _id:user._id,

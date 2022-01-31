@@ -18,6 +18,16 @@ class UserRepository extends UserModel {
     };
   }
 
+  public async updateConfirmationCode(user:any) {
+    const confirmationCode = await this.createConfirmationCode(user.email);
+    user.confirmation_code = confirmationCode.hash;
+    await user.save();
+    return { 
+      user:user, 
+      confirmationCode:confirmationCode.text 
+    };
+  }
+
   private async createConfirmationCode(email:string) {
     const jwt = new Jwt(process.env.JWT_CONFIRM_EMAIL_SECRET!);
     const confirmationCode = jwt.create({ email:email });

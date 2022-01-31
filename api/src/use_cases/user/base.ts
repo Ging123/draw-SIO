@@ -22,6 +22,19 @@ class Base {
     await this.cache.deleteOne(`user-${id}`);
     await this.cache.quit();
   }
+
+  protected sendCodeToConfirmEmail(data:any) {
+    const code = data.confirmationCode;
+    const confirmUrl = `${process.env.API_URL!}user/email/confirm/${code}`;
+    this.emailSender.send({
+      to:data.user.email,
+      subject:'Confirm your email',
+      text:`<h1>Hello, confirm your account</h1>
+      <p>Click right 
+      <a target="_blanket" href="${confirmUrl}">here</a> 
+      to confirm your account</p>`
+    });
+  }
 }
 
 export default Base;
