@@ -1,0 +1,14 @@
+//MIXINS
+@mixin flex($direction:flex, $justify-content:none, $align-item:none) {
+  align-items:$align-item;
+  display:flex;
+  flex-direction:$direction;
+  justify-content:$justify-content;
+}
+
+//PLACEHOLDERS
+%align-x-and-y {
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+}

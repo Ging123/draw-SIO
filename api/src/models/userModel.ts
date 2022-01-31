@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Jwt from '../externals/jwt';
 const Schema = mongoose.Schema;
 
 export interface user {
@@ -36,9 +37,6 @@ class UserModel {
     token: {
       type:String
     },
-    confirmed: {
-      type:Boolean
-    },
     confirmation_code: {
       type:String
     }
@@ -46,13 +44,12 @@ class UserModel {
 
   protected readonly userModel = mongoose.models.user || mongoose.model('user', this.userSchema);
 
-  protected createUser(userData:user) {
+  protected createUser(userData:object, confirmation_code:string) {
     return new this.userModel({
       ...userData,
       profile_photo:'',
       token:'',
-      confirmed:false,
-      confirmation_code:''
+      confirmation_code:confirmation_code
     });
   }
 }

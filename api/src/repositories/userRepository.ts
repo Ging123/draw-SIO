@@ -4,15 +4,28 @@ import Jwt from '../externals/jwt';
 
 class UserRepository extends UserModel { 
 
-  private readonly bcrypt = new Bcrypt();
-  private readonly jwt = new Jwt(process.env.JWT_SECRET!);
+  private readonly bcrypt = new Bcrypt(); 
 
   public async create(userData:user) {
     const hashedPassword = await this.bcrypt.hash(userData.password, process.env.PASSWORD_SALT!);
+    const confirmationCode = await this.createConfirmationCode(userData.email);
     userData.password = hashedPassword;
-    const user = this.createUser(userData);
+    const user = this.createUser(userData, confirmationCode.hash);
     await user.save();
-    return user;
+    return { 
+      user:user, 
+      confirmationCode:confirmationCode.text 
+    };
+  }
+
+  private async createConfirmationCode(email:string) {
+    const jwt = new Jwt(process.env.JWT_CONFIRM_EMAIL_SECRET!);
+    const confirmationCode = jwt.create({ email:email });
+    const confirmationCodeHash = await this.bcrypt.hash(confirmationCode, process.env.TOKEN_SALT!);
+    return {
+      text:confirmationCode,
+      hash:confirmationCodeHash
+    }
   }
 
   public async login(user:any) {
@@ -23,7 +36,8 @@ class UserRepository extends UserModel {
   }
 
   private async createLoginToken(user:any) {
-    const token = this.jwt.create({
+    const jwt = new Jwt(process.env.JWT_SECRET!);
+    const token = jwt.create({
       _id:user._id,
       email:user.email,
       username:user.username
@@ -33,7 +47,7 @@ class UserRepository extends UserModel {
   }
 
   public async confirmEmail(user:any) {
-    user.confirmed = true;
+    user.confirmation_code = '';
     await user.save();
     return user;
   }

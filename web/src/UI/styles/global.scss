@@ -1,0 +1,11 @@
+@import './colors.scss';
+
+* {
+  box-sizing:border-box;
+  font-family:arial;
+}
+
+body {
+  background:$light-blue;
+  margin:0px;
+}

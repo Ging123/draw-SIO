@@ -11,9 +11,10 @@ class UserCreateUseCase extends Base {
     this.validate(userData);
     await this.verifyIfEmailAlreadyExists(userData.email);
     await this.verifyIfUsernameAlreadyExists(userData.username);
-    const createdUser = await this.user.create(userData);
-    await this.saveUserDataInChache(createdUser);
-    if(process.env.MODE! === 'dev') return this.userData(createdUser);
+    const data = await this.user.create(userData);
+    await this.saveUserDataInChache(data.user);
+    if(process.env.MODE! === 'pro') this.sendCodeToConfirmEmail(data); 
+    return this.userData(data.user);
   }
 
   private validate(user:user) {
@@ -26,6 +27,7 @@ class UserCreateUseCase extends Base {
     if(this.validator.isEmpty(email)) throw exception('Campo de email não foi preenchido');
     if(!this.validator.isEmail(email)) throw exception('Email inválido');
     if(this.validator.isGreaterThanMaxLength(email, 100)) throw exception('Email deve ter menos de 100 caracteries');
+    this.validateEmailService(email);
   }
 
   private validateUsername(username:string) {
@@ -38,6 +40,21 @@ class UserCreateUseCase extends Base {
     if(this.validator.isEmpty(password)) throw exception('Campo de senha não foi preenchido');
     if(this.validator.isGreaterThanMaxLength(password, 30)) throw exception('Senha deve ter no máximo 30 caracteries');
     if(this.validator.isShorterThanMinLength(password, 7)) throw exception('Senha deve ter no mínimo 7 caracteries');
+  }
+
+  private validateEmailService(email:string) {
+    const service = this.getEmailService(email);
+    const validServices = ['gmail', 'outlook', 'hotmail'];
+    for(const validService of validServices) {
+      if(service === validService) return;
+    }
+    throw exception('Só aceitamos emails dos serviços outlook, gmail ou hotmail');
+  }
+
+  private getEmailService(email:string) {
+    const emailParts = email.split('@');
+    const service = emailParts[1].split('.')[0];
+    return service;
   }
 
   private async verifyIfEmailAlreadyExists(email:string) {
@@ -54,6 +71,19 @@ class UserCreateUseCase extends Base {
     await this.cache.connect();
     await this.saveUserInCache(user);
     await this.cache.quit();
+  }
+
+  private sendCodeToConfirmEmail(data:any) {
+    const code = data.confirmationCode;
+    const confirmUrl = `${process.env.API_URL!}user/password/confirm?code=${code}`;
+    this.emailSender.send({
+      to:data.user.email,
+      subject:'Confirm your email',
+      text:`<h1>Hello, confirm your account</h1>
+      <p>Click right 
+      <a target="_blanket" href="${confirmUrl}">here</a> 
+      to confirm your account</p>`
+    });
   }
 
   private userData(user:any) {

@@ -19,7 +19,7 @@ beforeAll(async () => {
     email:email,
     username:username,
     password:password
-  })
+  });
 });
 
 afterAll(async () => {

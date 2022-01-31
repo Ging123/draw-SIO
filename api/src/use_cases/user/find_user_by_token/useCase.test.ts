@@ -17,6 +17,7 @@ beforeAll(async () => {
     username:'findUserByToken',
     password:'123456789'
   });
+  userForTest = userForTest.user;
   token = await repo.login(userForTest)
 });
 

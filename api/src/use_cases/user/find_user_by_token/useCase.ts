@@ -23,7 +23,8 @@ class UserFindByTokenUseCase extends Base {
   private async getUserInCache(id:string) {
     await this.cache.connect();
     const user = await this.cache.get(`user-${id}`);
-    if(!user || !user.confirmed) return;
+    const userIsNotConfirmed = !user || user.confirmation_code;
+    if(userIsNotConfirmed) return;
     await this.cache.quit();
     return user;
   }
@@ -37,7 +38,8 @@ class UserFindByTokenUseCase extends Base {
   }
 
   private verifyIfUserHasConfirmedAccount(user:any) {
-    if(!user.confirmed) throw exception('Seu email ainda não foi confirmado', 401);
+    const userDontConfirmHisEmail = user.confirmation_code;
+    if(userDontConfirmHisEmail) throw exception('Seu email ainda não foi confirmado', 401);
   }
 
   private verifyIfUserIsLogged(user:any) {
