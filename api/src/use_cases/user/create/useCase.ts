@@ -75,7 +75,7 @@ class UserCreateUseCase extends Base {
 
   private sendCodeToConfirmEmail(data:any) {
     const code = data.confirmationCode;
-    const confirmUrl = `${process.env.API_URL!}user/password/confirm?code=${code}`;
+    const confirmUrl = `${process.env.API_URL!}user/email/confirm/${code}`;
     this.emailSender.send({
       to:data.user.email,
       subject:'Confirm your email',

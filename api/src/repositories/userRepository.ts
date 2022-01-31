@@ -47,7 +47,7 @@ class UserRepository extends UserModel {
   }
 
   public async confirmEmail(user:any) {
-    user.confirmation_code = '';
+    user.confirmation_code = undefined;
     await user.save();
     return user;
   }
