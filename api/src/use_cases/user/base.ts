@@ -3,6 +3,7 @@ import Cache from "../../externals/cache";
 import Jwt from "../../externals/jwt";
 import Bcrypt from "../../externals/bcrypt";
 import EmailSender from "../../externals/emailSender";
+import exception from "../../util/exception";
 
 class Base {
 
@@ -34,6 +35,18 @@ class Base {
       <a target="_blanket" href="${confirmUrl}">here</a> 
       to confirm your account</p>`
     });
+  }
+
+  protected async findUserByEmail(email:string, error:string) {
+    const user = await this.user.findByEmail(email);
+    if(!user) throw exception(error);
+    return user;
+  }
+
+  protected async verifyIfTokensMatch(token:string, hashedToken:string) {
+    const salt = process.env.TOKEN_SALT!;
+    const tokensMatch = await this.bcrypt.compare(token, hashedToken, salt);
+    if(!tokensMatch) throw exception('Token inválido');
   }
 }
 

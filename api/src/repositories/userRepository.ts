@@ -62,6 +62,10 @@ class UserRepository extends UserModel {
     return user;
   }
 
+  public async updatePassword() {
+    
+  }
+
   public async logout(user:any) {
     user.token = '';
     await user.save();

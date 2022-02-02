@@ -1,0 +1,5 @@
+@import '../../styles/effects.scss';
+
+.already-have-account-message {
+  @extend %light-blue-on-hover-or-click;
+}

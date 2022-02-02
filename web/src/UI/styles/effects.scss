@@ -1,0 +1,21 @@
+@import './colors.scss';
+
+%darker-on-hover-or-click {
+
+  &:hover {
+    cursor:pointer;
+    filter:brightness(95%)
+  }
+
+  &:active {
+    filter:brightness(85%);
+  }
+}
+
+%light-blue-on-hover-or-click {
+  @extend %darker-on-hover-or-click;
+
+  &:hover {
+    color:$light-blue;
+  }
+}
