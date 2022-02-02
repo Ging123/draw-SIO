@@ -86,7 +86,7 @@ test('Test: Send invalid token', async () => {
     await user.findUserByToken('asdasd');
   }
   catch(error:any) {
-    const invalidToken = 'Token inválido';
+    const invalidToken = 'Token expirou ou token inválido';
     expect(error.message).toBe(invalidToken);
   }
 });

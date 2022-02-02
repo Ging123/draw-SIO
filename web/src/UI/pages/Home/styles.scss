@@ -1,0 +1,13 @@
+@import '../../styles/containers.scss';
+
+#home-page-wrapper {
+  @extend %align-x-and-y;
+  position:absolute;
+  width:450px;
+}
+
+@media (max-width:450px) {
+  #home-page-wrapper {
+    width:100%;
+  }
+}

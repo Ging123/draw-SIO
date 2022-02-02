@@ -27,6 +27,29 @@ class Api {
     await axios.post(url, data, option)
     .catch((err) => { throw err.response.data });
   }
+
+  public async getUser(token:string) {
+    const url = `${this.url}user/`;
+    let error:any;
+    const res = await axios.get(url, {
+      withCredentials:true,
+      headers: { 'Authorization':token }
+    })
+    .catch((err) => { error = err.response.data });
+    if(error) return error;
+    return res;
+  }
+
+  public async getNewToken(token:string) {
+    const url = `${this.url}user/newToken`;
+    const option = { 
+      withCredentials:true,
+      headers: { 'Authorization':token }
+    };
+    const res = await axios.post(url, {}, option)
+    .catch((err) => { throw err.response.data });
+    return res;
+  }
 }
 
 export default Api;

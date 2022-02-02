@@ -19,7 +19,7 @@ class Jwt {
     let tokenData:any;
     if(!token) throw exception('Token não foi preenchido');
     jwt.verify(token, this.secretKeyOfToken, (err:any, data:any) => {
-      if(err) throw exception('Token inválido', 401);
+      if(err) throw exception('Token expirou ou token inválido', 401);
       tokenData = data;
     });
     return tokenData;

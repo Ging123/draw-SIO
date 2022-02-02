@@ -1,13 +1,16 @@
 import Api from "../../../../services/api";
+import LocalStorage from "../../../../services/localstorage";
 
 class LoginUseCase {
 
   private readonly user = new Api();
+  private readonly localstorage = new LocalStorage();
 
   public async login(emailOrUsername:string, password:string) {
     this.validateEmailOrUsername(emailOrUsername);
     this.validatePassword(password);
-    await this.user.login(emailOrUsername, password);
+    const res = await this.user.login(emailOrUsername, password);
+    this.localstorage.set('token', res.data.token);
   }
 
   private validateEmailOrUsername(emailOrUsername:string) {
