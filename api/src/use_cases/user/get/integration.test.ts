@@ -30,7 +30,8 @@ afterAll(async () => {
 test('Test: Get user data', async () => {
   const userForTest = await user.findByEmail(email);
   await user.confirmEmail(userForTest);
-  const token = await user.login(userForTest);
+  const result = await user.login(userForTest);
+  const token = result.token;
   const res = await req(app).get('/user/').set("Authorization", token)
   expect(res.body).toBeTruthy();
   expect(res.status).toBe(200);

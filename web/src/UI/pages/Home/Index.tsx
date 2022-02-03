@@ -12,6 +12,7 @@ interface user {
 }
 
 const Home = () => {
+  document.title = 'Bem Vindo';
   const [userData, setUserData] = useState<user>();
   const user = new GetUserUseCase();
   const navigate = useNavigate();

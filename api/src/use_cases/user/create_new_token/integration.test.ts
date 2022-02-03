@@ -30,7 +30,8 @@ afterAll(async () => {
 test('Test: Create a new token', async () => {
   const userForTest = await user.findByEmail(email);
   await user.confirmEmail(userForTest);
-  const token = await user.login(userForTest);
+  const result = await user.login(userForTest);
+  const token = result.token;
   const res = await req(app).post('/user/newToken').set("Authorization", token);
   expect(res.body.token).toBeTruthy();
   expect(res.status).toBe(201);

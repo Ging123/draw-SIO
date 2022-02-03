@@ -42,7 +42,7 @@ class UserRepository extends UserModel {
     const token = await this.createLoginToken(user);
     user.token = token.hash;
     await user.save();
-    return token.text;
+    return {token: token.text, user:user};
   }
 
   private async createLoginToken(user:any) {

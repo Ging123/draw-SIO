@@ -29,7 +29,8 @@ afterAll(async () => {
 test('Test: delete an user', async () => {
   const userForTest = await user.findByEmail(email);
   await user.confirmEmail(userForTest);
-  const token = await user.login(userForTest);
+  const result = await user.login(userForTest);
+  const token = result.token;
   const res = await req(app).delete('/user/').set("Authorization", token)
   expect(res.status).toBe(204);
 });

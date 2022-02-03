@@ -1,18 +1,15 @@
-import Bcrypt from "../../../externals/bcrypt";
-import UserRepository from "../../../repositories/userRepository";
 import exception from "../../../util/exception";
+import Base from "../base";
 
-class UserLoginUseCase { 
-
-  private readonly user = new UserRepository();
-  private readonly bcrypt = new Bcrypt();
+class UserLoginUseCase extends Base { 
 
   public async login(emailOrUsername:string, password:string) {
     const userFound = await this.getUserByEmailOrUsername(emailOrUsername);
     await this.verifyIfPasswordMatch(password, userFound.password);
-    this.verifyIfUserAlreadyIsLogged(userFound);
-    const token = await this.user.login(userFound);
-    return { token:token };
+    this.verifyIfUserHasAConfirmedAccount(userFound);
+    const result = await this.user.login(userFound);
+    await this.saveInCache(result.user);
+    return { token:result.token };
   }
 
   private async getUserByEmailOrUsername(emailOrUsername:string) {
@@ -27,8 +24,14 @@ class UserLoginUseCase {
     if(!passwordMatch) throw exception('Senha digitada errada'); 
   }
 
-  private verifyIfUserAlreadyIsLogged(user:any) {
-    if(user.token) throw exception('Você já está logado');
+  private verifyIfUserHasAConfirmedAccount(user:any) {
+    if(user.confirmation_code) throw exception('Seu email ainda não foi confirmado', 403);
+  }
+
+  private async saveInCache(user:any) {
+    await this.cache.connect();
+    await this.saveUserInCache(user);
+    await this.cache.quit();
   }
 } 
 

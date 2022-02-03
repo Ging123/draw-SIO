@@ -27,11 +27,23 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
+test('Test: Login without confirm email', async () => {
+  const data = {
+    emailOrUsername:email,
+    password:password
+  }
+  const res = await req(app).post('/user/login').send(data);
+  expect(res.body).toBe('Seu email ainda não foi confirmado');
+  expect(res.status).toBe(403);
+});
+
 test('Test: Login user', async () => {
   const data = {
     emailOrUsername:email,
     password:password
   }
+  const userToTest = await user.findByEmail(email);
+  await user.confirmEmail(userToTest);
   const res = await req(app).post('/user/login').send(data);
   expect(res.body.token).toBeTruthy();
   expect(res.status).toBe(201);
@@ -54,15 +66,5 @@ test('Test: Send wrong password', async () => {
   }
   const res = await req(app).post('/user/login').send(data);
   expect(res.body).toBe('Senha digitada errada');
-  expect(res.status).toBe(400);
-});
-
-test('Test: Login in an account that is already logged', async () => {
-  const data = {
-    emailOrUsername:username,
-    password:password
-  }
-  const res = await req(app).post('/user/login').send(data);
-  expect(res.body).toBe('Você já está logado');
   expect(res.status).toBe(400);
 });

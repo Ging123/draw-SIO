@@ -18,7 +18,8 @@ beforeAll(async () => {
     password:'123456789'
   });
   userForTest = userForTest.user;
-  token = await repo.login(userForTest)
+  const result = await repo.login(userForTest);
+  token = result.token;
 });
 
 afterAll(async () => {

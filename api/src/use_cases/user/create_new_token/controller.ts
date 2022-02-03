@@ -8,7 +8,8 @@ const user = new UserRepository();
 
 route.post('/newToken', authUser, async (req:any, res) => {
   try {
-    const token = await user.login(req.user);
+    const result = await user.login(req.user);
+    const token = result.token;
     res.status(201).json({ token:token })
   }
   catch(err) {

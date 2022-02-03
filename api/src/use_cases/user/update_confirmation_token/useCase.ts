@@ -6,7 +6,7 @@ class UserUpdateConfirmationToken extends Base {
   public async updateToken(email:string) {
     const user = await this.getUserByEmail(email);
     const data = await this.user.updateConfirmationCode(user);
-    if(process.env.MODE! === 'pro') this.sendCodeToConfirmEmail(data);
+    if(process.env.MODE! === 'pro') this.sendConfirmationCode(data);
   }
 
   private async getUserByEmail(email:string) {

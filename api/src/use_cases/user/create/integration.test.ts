@@ -69,18 +69,6 @@ test('Test: Send email with length greater than 100', async () => {
   expect(res.status).toBe(400);
 });
 
-test('Test: send email with invalid service', async () => {
-  const data = {
-    email:'createUserUseCase@jack.com',
-    username:username,
-    password:password
-  }
-  const res = await req(app).post('/user').send(data);
-  const invalidService = 'Só aceitamos emails dos serviços outlook, gmail ou hotmail';
-  expect(res.body).toBe(invalidService);
-  expect(res.status).toBe(400);
-});
-
 test('Test: Doesnt send username', async () => {
   const data = {
     email:email,
