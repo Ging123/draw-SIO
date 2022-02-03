@@ -1,15 +1,14 @@
 import express from 'express';
 import authUser from '../../../middlewares/auth';
-import UserRepository from '../../../repositories/userRepository';
 import { verifyIfIsAnInternalException } from '../../../util/exception';
+import UserCreateNewTokenUseCase from './useCase';
 
 const route = express.Router();
-const user = new UserRepository();
+const user = new UserCreateNewTokenUseCase();
 
 route.post('/newToken', authUser, async (req:any, res) => {
   try {
-    const result = await user.login(req.user);
-    const token = result.token;
+    const token = await user.createNewToken(req.user);
     res.status(201).json({ token:token })
   }
   catch(err) {

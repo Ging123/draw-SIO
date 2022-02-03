@@ -23,17 +23,16 @@ class UserFindByTokenUseCase extends Base {
   private async getUserInCache(id:string) {
     await this.cache.connect();
     const user = await this.cache.get(`user-${id}`);
-    const userIsNotConfirmed = !user || user.confirmation_code;
-    if(userIsNotConfirmed) return;
+    const userInCacheIsNotConfirmed = !user || user.confirmation_code;
     await this.cache.quit();
+    if(userInCacheIsNotConfirmed) return;
     return user;
   }
 
   private async getUserInDatabase(id:string) {
     const user = await this.user.findById(id);
     if(!user) throw exception('Token inválido');
-    await this.saveUserInCache(user);
-    await this.cache.quit();
+    this.saveUserDataInChache(user);
     return user;
   }
 

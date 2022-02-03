@@ -3,7 +3,7 @@ import Base from "../base";
 class UserDeleteUseCase extends Base {
 
   public async delete(user:any) {
-    await this.deleteFromCache(user._id);
+    this.deleteFromCache(user._id);
     await this.user.deleteByEmail(user.email);
   }
 }

@@ -8,7 +8,7 @@ class UserLoginUseCase extends Base {
     await this.verifyIfPasswordMatch(password, userFound.password);
     this.verifyIfUserHasAConfirmedAccount(userFound);
     const result = await this.user.login(userFound);
-    await this.saveInCache(result.user);
+    this.saveUserDataInChache(result.user);
     return { token:result.token };
   }
 
@@ -26,12 +26,6 @@ class UserLoginUseCase extends Base {
 
   private verifyIfUserHasAConfirmedAccount(user:any) {
     if(user.confirmation_code) throw exception('Seu email ainda não foi confirmado', 403);
-  }
-
-  private async saveInCache(user:any) {
-    await this.cache.connect();
-    await this.saveUserInCache(user);
-    await this.cache.quit();
   }
 } 
 

@@ -1,14 +1,15 @@
 import EmailSender from "../externals/emailSender";
-import Queue from 'bull';
+import Queue from "../externals/queue";
 
-const queueName = 'confirmAccountMail';
+const queue = new Queue('confirmAccountMail');
 
 function sendConfirmationCode(data:any) {
+  const user = data.data.user;
+  const code = data.data.confirmationCode;
   const emailSender = new EmailSender();
-  const code = data.confirmationCode;
   const confirmUrl = `${process.env.API_URL!}user/email/confirm/${code}`;
   emailSender.send({
-    to:data.user.email,
+    to:user.email,
     subject:'Confirm your email',
     html:`<h1>Hello, confirm your account</h1>
     <p>Click right 
@@ -17,15 +18,6 @@ function sendConfirmationCode(data:any) {
   });
 }
 
-const confirmAccountQueue = new Queue(queueName, process.env.REDIS_URL!);
+queue.process(sendConfirmationCode);
 
-confirmAccountQueue.process((job) => {
-  sendConfirmationCode(job.data);
-  
-  confirmAccountQueue.on('failed', (job, err) => {
-    console.log('Job failed', queueName, job.data);
-    console.log(err);
-  })
-});
-
-export default confirmAccountQueue;
+export default queue;

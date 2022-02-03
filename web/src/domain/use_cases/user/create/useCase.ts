@@ -21,7 +21,6 @@ class CreateAccountUseCase {
   private validateEmail(email:string) {
     if(this.validator.isEmpty(email)) throw 'Campo de email não foi preenchido';
     if(!this.validator.isEmail(email)) throw 'Email inválido';
-    this.validateEmailService(email);
   }
 
   private validateUsername(username:string) {
@@ -32,21 +31,6 @@ class CreateAccountUseCase {
   private validatePassword(password:string) {
     if(this.validator.isEmpty(password)) throw 'Campo de senha não foi preenchido';
     if(this.validator.isShorterThanMinLength(password, 7)) throw 'Senha deve ter no mínimo 7 caracteries';
-  }
-
-  private validateEmailService(email:string) {
-    const service = this.getEmailService(email);
-    const validServices = ['gmail', 'outlook', 'hotmail'];
-    for(const validService of validServices) {
-      if(service === validService) return;
-    }
-    throw 'Só aceitamos emails dos serviços outlook, gmail ou hotmail';
-  }
-
-  private getEmailService(email:string) {
-    const emailParts = email.split('@');
-    const service = emailParts[1].split('.')[0];
-    return service;
   }
 }
 

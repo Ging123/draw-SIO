@@ -12,7 +12,7 @@ class UserCreateUseCase extends Base {
     await this.verifyIfEmailAlreadyExists(userData.email);
     await this.verifyIfUsernameAlreadyExists(userData.username);
     const data = await this.user.create(userData);
-    await this.saveUserDataInChache(data.user);
+    this.saveUserDataInChache(data.user);
     if(process.env.MODE! === 'pro') this.sendConfirmationCode(data);
     return this.userData(data.user);
   }
@@ -49,12 +49,6 @@ class UserCreateUseCase extends Base {
   private async verifyIfUsernameAlreadyExists(username:string) {
     const usernameExists = await this.user.findByUsername(username);
     if(usernameExists) throw exception('Esse nome de usuário já está sendo utilizado');
-  }
-
-  private async saveUserDataInChache(user:any) {
-    await this.cache.connect();
-    await this.saveUserInCache(user);
-    await this.cache.quit();
   }
 
   private userData(user:any) {

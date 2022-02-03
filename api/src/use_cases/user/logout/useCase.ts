@@ -4,7 +4,7 @@ class UserLogoutUseCase extends Base {
   
   public async logout(user:any) {
     await this.user.logout(user);
-    await this.deleteFromCache(user.id);
+    this.deleteFromCache(user.id);
   }
 }
 
