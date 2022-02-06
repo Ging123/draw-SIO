@@ -1,11 +1,12 @@
 import express from 'express'; 
+import { xssBody } from '../../../middlewares/xss';
 import { verifyIfIsAnInternalException } from '../../../util/exception';
 import UserCreateUseCase from './useCase'; 
 
 const route = express.Router(); 
 const user = new UserCreateUseCase(); 
 
-route.post('/', async (req, res) => {
+route.post('/', xssBody, async (req, res) => {
   try {
     const { email, username, password } = req.body;
     const createdUser = await user.create({

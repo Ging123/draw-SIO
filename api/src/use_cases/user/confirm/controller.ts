@@ -1,11 +1,12 @@
 import express from 'express'; 
+import { xssParams } from '../../../middlewares/xss';
 import { verifyIfIsAnInternalException } from '../../../util/exception';
 import EmailConfirmUseCase from './useCase';
 
 const route = express.Router(); 
 const email = new EmailConfirmUseCase(); 
 
-route.get('/email/confirm/:token', async (req, res) => {
+route.get('/email/confirm/:token', xssParams, async (req, res) => {
   try {
     const token = req.params.token;
     await email.confirmAccount(token);
