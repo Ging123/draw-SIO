@@ -31,6 +31,7 @@ class Base {
   }
 
   protected async verifyIfTokensMatch(token:string, hashedToken:string) {
+    if(!hashedToken) throw exception('Email já foi confirmado');
     const salt = process.env.TOKEN_SALT!;
     const tokensMatch = await this.bcrypt.compare(token, hashedToken, salt);
     if(!tokensMatch) throw exception('Token inválido');

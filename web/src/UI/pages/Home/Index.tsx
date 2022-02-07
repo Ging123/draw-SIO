@@ -30,18 +30,18 @@ const Home = () => {
     })()
   }, []);
 
-  return (
+  return ( 
     <>
       { userData && 
-        <div id='home-page-wrapper'>
+        <div id="home-page-wrapper">
           <Text
             content={ `Bem vindo ${userData.username}` }
             fontWeight={ 600 }
-            fontSize='30px'
+            fontSize="30px"
             margin="50px"
             textAlign="center"
           />
-          <PlayButton/>
+          <PlayButton />
         </div>
       }
     </>

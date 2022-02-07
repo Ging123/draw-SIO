@@ -7,17 +7,21 @@ import './style.scss';
 
 const SendConfirmationCodeAgain = () => {
   const [sentMessage, setSentMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const goToLoginPage = () => navigate('/');
   
   async function sendNewCode() {
     try {
       const user = new UpdateConfirmationCode();
+      setLoading(true);
       await user.update();
+      setLoading(false);
       setSentMessage(true);
       setTimeout(() => { setSentMessage(false)}, 1000);
     }
     catch(err) {
+      setLoading(false);
       if(err === 'usuário não logado') goToLoginPage();
     }
   }
@@ -27,6 +31,7 @@ const SendConfirmationCodeAgain = () => {
       <DefaultButton 
         className='send-confirmation-code-again-button'
         content='Enviar Código Novamente'
+        loading={ loading }
         onClick={ sendNewCode }
       />
       {sentMessage && 

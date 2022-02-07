@@ -2,7 +2,6 @@
 @import '../../styles/effects.scss';
 
 .default-button {
-  @extend %darker-on-hover-or-click;
   border:none;
   border-radius:6px;
   background:$light-blue;
@@ -13,4 +12,12 @@
   }
   padding:10px;
   width:100%;
+
+  &.not-loading {
+    @extend %darker-on-hover-or-click;
+  }
+
+  &.loading {
+    background:gray;
+  }
 }

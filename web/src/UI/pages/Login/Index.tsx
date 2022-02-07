@@ -14,7 +14,7 @@ const Login = () => {
         fontSize="25px"
         margin="25px"
       />
-      <LoginForm />
+      <LoginForm /> 
       <ForgotPasswordOrSignUp/>
     </Box>
   );

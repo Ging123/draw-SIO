@@ -10,17 +10,22 @@ const LoginForm = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const user = new LoginUseCase();
   const navigate = useNavigate();
   const localstorage = new LocalStorage();
   const goToEmailConfirmatePage = () => navigate('/email/confirmate');
+  const goToHomePage = () => navigate('/home');
 
   async function send(e:FormEvent) {
     try {
       e.preventDefault();
+      setLoading(true);
       await user.login(emailOrUsername, password);
+      goToHomePage();
     }
     catch(err:any) {
+      setLoading(false);
       const emailNotConfirmed = 'Seu email ainda não foi confirmado';
       if(err !== emailNotConfirmed) return setError(err);
       localstorage.set('emailOrUsername', emailOrUsername);
@@ -44,6 +49,7 @@ const LoginForm = () => {
       />
       <DefaultButton
         content="Entrar"
+        loading={ loading }
       />
     </Form>
   );

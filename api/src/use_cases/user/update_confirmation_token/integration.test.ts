@@ -36,7 +36,7 @@ test('Test: Confirm an email using updated confirmation code', async () => {
   const data = await user.updateConfirmationCode(userForTest);
   const confirmationCode = data.confirmationCode;
   const res = await req(app).get(`/user/email/confirm/${confirmationCode}`);
-  expect(res.status).toBe(204);
+  expect(res.status).toBe(302);
 }); 
 
 test('Test: Update confirmation token of an email that is already confirmed', async () => {

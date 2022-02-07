@@ -11,6 +11,7 @@ const SignUpForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const user = new CreateAccountUseCase();
   const localstorage = new LocalStorage();
@@ -19,12 +20,13 @@ const SignUpForm = () => {
   async function send(e:FormEvent) {
     try {
       e.preventDefault();
+      setLoading(true);
       await user.create(email, username, password);
-      setError('');
       localstorage.set('emailOrUsername', email);
       goToEmailPage();
     }
     catch(err:any) {
+      setLoading(false);
       setError(err);
     }
   }
@@ -53,6 +55,7 @@ const SignUpForm = () => {
       />
       <DefaultButton
         content="Criar Conta"
+        loading={ loading }
         margin="10px 0px"
       />
     </Form>

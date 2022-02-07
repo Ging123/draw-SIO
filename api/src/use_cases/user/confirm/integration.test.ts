@@ -30,14 +30,14 @@ afterAll(async () => {
 
 test('Test: Confirm an account', async () => {
   const res = await req(app).get(`/user/email/confirm/${confirmation_code}`);
-  expect(res.status).toBe(204);
+  expect(res.status).toBe(302);
   const userForTest = await user.findByEmail(email);
   expect(userForTest.confirmation_code).toBeFalsy();
-  await user.deleteByEmail(email);
 });
 
-test('Test: Send token without owner', async () => {
+test('Test: Send token of an user that is confirmed', async () => {
   const res = await req(app).get(`/user/email/confirm/${confirmation_code}`);
   expect(res.status).toBe(400);
-  expect(res.body).toBe('Token inválido');
+  expect(res.body).toBe('Email já foi confirmado');
+  await user.deleteByEmail(email);
 });

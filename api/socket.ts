@@ -9,4 +9,4 @@ module.exports = (io:socket) => {
     
     socket.on('join_match', async (data:any) => await joinMatch(data, socket));
   });
-};
+}; 
