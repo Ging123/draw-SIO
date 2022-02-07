@@ -1,0 +1,12 @@
+.send-confirmation-code-again-button {
+  background:white;
+  box-shadow:1px 1px 10px gray;
+  color:black;
+  width:350px !important;
+}
+
+@media (max-width:350px) {
+  .send-confirmation-code-again-button {
+    width:100% !important;
+  }
+}

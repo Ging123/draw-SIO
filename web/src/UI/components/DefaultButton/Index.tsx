@@ -1,6 +1,7 @@
 import './styles.scss';
 
 interface props {
+  className?:string;
   content?:string;
   type?:'button'|'reset'|'submit';
   margin?:string;
@@ -12,10 +13,10 @@ const DefaultButton = (props:props) => {
 
   return (
     <button 
-      className="default-button" 
+      className={`default-button ${props.className || ''}`} 
       type={ props.type } 
       style={ styles } 
-      onClick={props.onClick}>
+      onClick={ props.onClick }>
       { props.content }
     </button>
   );

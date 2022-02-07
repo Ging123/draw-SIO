@@ -1,0 +1,16 @@
+@import '../../styles/containers.scss';
+
+.message-box {
+  @extend %align-x;
+  background:#0000008f;
+  border-radius:6px;
+  color:white;
+  font: {
+    size:16px;
+    weight:600;
+  }
+  padding:10px 30px;
+  pointer-events:none;
+  position:fixed;
+  top:15px;
+}

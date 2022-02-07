@@ -5,6 +5,7 @@ const Login = lazy(() => import('./UI/pages/Login/Index'));
 const SignUp = lazy(() => import('./UI/pages/SignUp/Index'));
 const Home = lazy(() => import('./UI/pages/Home/Index'));
 const Game = lazy(() => import('./UI/pages/Game/Index'));
+const EmailConfirmate = lazy(() => import('./UI/pages/EmailConfirmate/Index'));
 
 const Routes = () => {
   return (
@@ -14,6 +15,7 @@ const Routes = () => {
         <Route element={<SignUp/>} path="/signup"/>
         <Route element={<Home/>} path="/home"/>
         <Route element={<Game/>} path="/game"/>
+        <Route element={<EmailConfirmate/>} path='/email/confirmate' />
       </Endpoints>
     </Suspense>
   );

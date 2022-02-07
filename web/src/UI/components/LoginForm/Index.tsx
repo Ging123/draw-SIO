@@ -3,12 +3,17 @@ import DefaultButton from '../DefaultButton/Index';
 import DefaultInput from '../DefaultInput/Index';
 import Form from '../Form/Index';
 import LoginUseCase from '../../../domain/use_cases/user/login/useCase';
+import { useNavigate } from 'react-router-dom';
+import LocalStorage from '../../../services/localstorage';
 
 const LoginForm = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const user = new LoginUseCase();
+  const navigate = useNavigate();
+  const localstorage = new LocalStorage();
+  const goToEmailConfirmatePage = () => navigate('/email/confirmate');
 
   async function send(e:FormEvent) {
     try {
@@ -16,7 +21,10 @@ const LoginForm = () => {
       await user.login(emailOrUsername, password);
     }
     catch(err:any) {
-      setError(err);
+      const emailNotConfirmed = 'Seu email ainda não foi confirmado';
+      if(err !== emailNotConfirmed) return setError(err);
+      localstorage.set('emailOrUsername', emailOrUsername);
+      goToEmailConfirmatePage();
     }
   }
 

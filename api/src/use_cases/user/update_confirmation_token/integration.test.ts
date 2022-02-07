@@ -27,7 +27,7 @@ afterAll(async () => {
 });
 
 test('Test: Update confirmation token', async () => {
-  const res = await req(app).put('/user/email/confirm').send({ email:email });
+  const res = await req(app).put('/user/email/confirm').send({ emailOrUsername:email });
   expect(res.status).toBe(200);
 });
 
@@ -40,14 +40,14 @@ test('Test: Confirm an email using updated confirmation code', async () => {
 }); 
 
 test('Test: Update confirmation token of an email that is already confirmed', async () => {
-  const res = await req(app).put('/user/email/confirm').send({ email:email });
+  const res = await req(app).put('/user/email/confirm').send({ emailOrUsername:email });
   expect(res.status).toBe(400);
   expect(res.body).toBe('Esse email já foi confirmado');
 });
 
 test('Test: Update confirmation token of an email that doesnt exists', async () => {
   await user.deleteByEmail(email);
-  const res = await req(app).put('/user/email/confirm').send({ email:email });
+  const res = await req(app).put('/user/email/confirm').send({ emailOrUsername:email });
   expect(res.status).toBe(400);
-  expect(res.body).toBe('Esse email não existe');
+  expect(res.body).toBe('Esse email ou nome de usuário não existe');
 });

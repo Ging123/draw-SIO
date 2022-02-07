@@ -50,6 +50,13 @@ class Api {
     .catch((err) => { throw err.response.data });
     return res;
   }
+
+  public async updateConfirmationToken(emailOrUsername:string) {
+    const url = `${this.url}user/email/confirm`;
+    const option = { withCredentials:true };
+    const data = { emailOrUsername:emailOrUsername };
+    await axios.put(url, data, option);
+  }
 }
 
 export default Api;

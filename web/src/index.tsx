@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import App from './App';
 
 const errorMessage = () => {

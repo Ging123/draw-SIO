@@ -8,7 +8,7 @@ const user = new UserUpdateConfirmationToken();
 
 route.put('/email/confirm', xssBody, async (req, res) => {
   try {
-    await user.updateToken(req.body.email);
+    await user.updateToken(req.body.emailOrUsername);
     res.status(200).send();
   }
   catch(err) {
