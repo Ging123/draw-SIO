@@ -1,0 +1,11 @@
+@import '../../styles/containers.scss';
+
+#game-page-wrapper {
+  @extend %flex-row;
+}
+
+@media (max-width:950px) {
+  #game-page-wrapper {
+    flex-direction:column !important;
+  }
+}

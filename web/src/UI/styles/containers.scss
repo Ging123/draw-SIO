@@ -1,5 +1,5 @@
 //MIXINS
-@mixin flex($direction:flex, $justify-content:none, $align-item:none) {
+@mixin flex($direction:row, $justify-content:none, $align-item:none) {
   align-items:$align-item;
   display:flex;
   flex-direction:$direction;
@@ -16,4 +16,16 @@
 %align-x {
   left:50%;
   transform:translateX(-50%);
+}
+
+%flex-column, %flex-row {
+  display:flex;
+}
+
+%flex-column {
+  flex-direction:column;
+}
+
+%flex-row {
+  flex-direction:row;
 }
