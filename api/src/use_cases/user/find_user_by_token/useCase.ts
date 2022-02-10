@@ -12,7 +12,22 @@ class UserFindByTokenUseCase extends Base {
     return user;
   }
 
-  protected async getUserById(id:string) {
+  private verifyIfUserHasConfirmedAccount(user:any) {
+    const userDontConfirmHisEmail = user.confirmation_code;
+    if(userDontConfirmHisEmail) throw exception('Seu email ainda não foi confirmado', 401);
+  }
+
+  private verifyIfUserIsLogged(user:any) {
+    if(!user.token) throw exception('Você não está logado', 401);
+  }
+
+  private async validateToken(textToken:string, hashToken:string) {
+    const tokenSalt = process.env.TOKEN_SALT!;
+    const tokensMatch = await this.bcrypt.compare(textToken, hashToken, tokenSalt);
+    if(!tokensMatch) throw exception('Token inválido', 401);
+  }
+
+  private async getUserById(id:string) {
     let user:any;
     user = await this.getUserInCache(id);
     if(user) return user;
@@ -34,21 +49,6 @@ class UserFindByTokenUseCase extends Base {
     if(!user) throw exception('Token inválido');
     this.saveUserDataInChache(user);
     return user;
-  }
-
-  private verifyIfUserHasConfirmedAccount(user:any) {
-    const userDontConfirmHisEmail = user.confirmation_code;
-    if(userDontConfirmHisEmail) throw exception('Seu email ainda não foi confirmado', 401);
-  }
-
-  private verifyIfUserIsLogged(user:any) {
-    if(!user.token) throw exception('Você não está logado', 401);
-  }
-
-  private async validateToken(textToken:string, hashToken:string) {
-    const tokenSalt = process.env.TOKEN_SALT!;
-    const tokensMatch = await this.bcrypt.compare(textToken, hashToken, tokenSalt);
-    if(!tokensMatch) throw exception('Token inválido', 401);
   }
 }
 

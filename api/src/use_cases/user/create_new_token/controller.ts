@@ -6,13 +6,15 @@ import UserCreateNewTokenUseCase from './useCase';
 const route = express.Router();
 const user = new UserCreateNewTokenUseCase();
 
-route.post('/newToken', authUser, async (req:any, res) => {
+route.post('/newToken', async (req, res) => {
   try {
-    const token = await user.createNewToken(req.user);
+    const { authToken, id } = req.body;
+    const token = await user.createNewToken(authToken, id);
     res.status(201).json({ token:token })
   }
   catch(err) {
     const error = verifyIfIsAnInternalException(err);
+    console.log(error.message);
     res.status(error.status).json(error.message);
   }
 })

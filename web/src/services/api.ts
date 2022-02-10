@@ -1,8 +1,11 @@
 import axios from "axios";
+import config from "../config";
+import LocalStorage from "./localstorage";
 
 class Api {
 
-  private readonly url = 'http://localhost:8000/'; 
+  private readonly url = config.apiUrl; 
+  private readonly localstorage = new LocalStorage();
   
   public async login(emailOrUsername:string, password:string) {
     const url = `${this.url}user/login`;
@@ -28,25 +31,23 @@ class Api {
     .catch((err) => { throw err.response.data });
   }
 
-  public async getUser(token:string) {
+  public async getUser() {
+    const token = this.localstorage.get('token');
+    if(!token) throw 'Usuário não está logado';
     const url = `${this.url}user/`;
-    let error:any;
     const res = await axios.get(url, {
       withCredentials:true,
       headers: { 'Authorization':token }
     })
-    .catch((err) => { error = err.response.data });
-    if(error) return error;
+    .catch((err) => { throw err.response.data });
     return res;
   }
 
-  public async getNewToken(token:string) {
+  public async getNewToken(token:string, id:string) {
     const url = `${this.url}user/newToken`;
-    const option = { 
-      withCredentials:true,
-      headers: { 'Authorization':token }
-    };
-    const res = await axios.post(url, {}, option)
+    const data = { authToken:token, id:id }
+    const option = { withCredentials:true };
+    const res = await axios.post(url, data, option)
     .catch((err) => { throw err.response.data });
     return res;
   }

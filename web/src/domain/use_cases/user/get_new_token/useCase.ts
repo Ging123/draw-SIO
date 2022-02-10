@@ -8,8 +8,9 @@ class GetNewTokenForUser {
 
   public async getNewToken() {
     const token = this.localstorage.get('token');
-    if(!token) throw 'Usuário não está logado';
-    const res = await this.api.getNewToken(token);
+    const id = this.localstorage.get('id');
+    if(!token || !id) throw 'Usuário não está logado';
+    const res = await this.api.getNewToken(token, id);
     const newToken = res.data.token;
     this.localstorage.set('token', newToken);
   }

@@ -32,7 +32,11 @@ test('Test: Create a new token', async () => {
   await user.confirmEmail(userForTest);
   const result = await user.login(userForTest);
   const token = result.token;
-  const res = await req(app).post('/user/newToken').set("Authorization", token);
+  const data = {
+    authToken:token,
+    id:userForTest._id
+  }
+  const res = await req(app).post('/user/newToken').send(data);
   expect(res.body.token).toBeTruthy();
   expect(res.status).toBe(201);
   newToken = res.body.token;

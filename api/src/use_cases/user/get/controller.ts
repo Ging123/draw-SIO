@@ -7,6 +7,7 @@ const route = express.Router();
 route.get('/', authUser, async (req:any, res) => {
   try {
     const userData = {
+      _id:req.user._id,
       email:req.user.email,
       username:req.user.username,
       profile_photo:req.user.profile_photo

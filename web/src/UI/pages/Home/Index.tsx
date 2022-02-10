@@ -16,7 +16,7 @@ const Home = () => {
   const [userData, setUserData] = useState<user>();
   const user = new GetUserUseCase();
   const navigate = useNavigate();
-  const goToLoginPage = () => navigate('/')
+  const goToLoginPage = () => navigate('/');
 
   useEffect(() => {
     (async () => {

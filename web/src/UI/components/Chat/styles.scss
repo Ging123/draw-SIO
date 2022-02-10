@@ -1,18 +1,16 @@
 #chat-container {
   background:white;
-  border:1px solid red;
+  height:500px;
   width:350px;
 }
 
 #chat {
-  border:1px solid blue;
   height:90%;
   overflow-y:scroll;
   max-width:100%;
 }
 
 .message {
-  border:1px solid pink;
   padding:15px;
   width:100%;
   word-break:break-all;
