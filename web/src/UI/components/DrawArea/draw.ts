@@ -39,7 +39,7 @@ class Drawer {
     this.canvas.addEventListener('mousemove', (e:MouseEvent) => this.draw(e));
   }
 
-  public getMousePosition(e:MouseEvent) {
+  private getMousePosition(e:MouseEvent) {
     return {
       x:e.clientX - this.canvas.offsetLeft,
       y:e.clientY - this.canvas.offsetTop

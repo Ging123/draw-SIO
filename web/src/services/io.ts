@@ -4,6 +4,7 @@ class Io {
 
   public connect(url:string, authToken:string) {
     return io(url, {
+      autoConnect:false,
       transports: ['websocket', 'polling', 'flashsocket'],
       auth:{ "token":authToken } 
     });

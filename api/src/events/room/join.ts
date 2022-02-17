@@ -6,7 +6,7 @@ const room = new RoomRepository();
 async function joinARoom(socket:socket) {
   const foundRoom = await room.getAFreeRoom();
   if(foundRoom) return await connectPlayerToRoom(socket, foundRoom);
-  await createNewRoom(socket);
+  return await createNewRoom(socket);
 }
 
 async function connectPlayerToRoom(socket:socket, roomToConnect:any) {

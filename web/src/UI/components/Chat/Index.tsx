@@ -20,6 +20,10 @@ const ChatContainer = (props:props) => {
       const whoSentTheMessage = `${player.username}: `;
       chat.sendGuess(player.guess, whoSentTheMessage);
     });
+
+    props.socket.on('player_exist', (message) => {
+      chat.sendGameMessage(message, 'red');
+    })
   }, []);
 
   return (

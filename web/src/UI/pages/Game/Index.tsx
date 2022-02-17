@@ -14,12 +14,13 @@ const Game = () => {
   const [socket, setSocket] = useState(io.connect(config.apiUrl, token));
 
   useEffect(() => {
+    socket.connect();
     socket.on('connect_error', (err:any) => {
       console.log(err);
     });
 
     socket.emit("connect_to_a_room");
-  }, []);
+  }, [socket]);
 
   return (
     <Wrapper id="game-page-wrapper">

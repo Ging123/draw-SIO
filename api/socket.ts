@@ -1,4 +1,5 @@
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import disconectFromRoom from './src/events/room/disconnect';
 import socketAuth from "./src/middlewares/socketAuth";
 import sendGuess from "./src/events/guess/send";
 import joinARoom from "./src/events/room/join";
@@ -16,5 +17,7 @@ module.exports = (io:io) => {
     socket.on('connect_to_a_room', async () => roomId = await joinARoom(socket));
     
     socket.on('guess', async (guess) => await sendGuess(socket, roomId, guess));
+
+    socket.on('disconnect', async () => await disconectFromRoom(socket, roomId));
   });
 }; 
