@@ -1,13 +1,13 @@
 class Chat {
 
-  public send(guess:string) {
+  public sendGuess(guess:string, whoSentGuess:string) {
     if(!guess) return;
-    this.createClientGuessIntoHisChat(guess);
+    this.createClientGuessIntoHisChat(guess, whoSentGuess);
   }
 
-  private createClientGuessIntoHisChat(guess:string) {
+  private createClientGuessIntoHisChat(guess:string, whoSentGuess:string) {
     const chat = document.getElementById('chat')!;
-    const guessMessage = this.guessMessage("Você: ", guess);
+    const guessMessage = this.guessMessage(whoSentGuess, guess);
     chat.append(guessMessage);
   }
 

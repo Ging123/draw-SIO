@@ -1,14 +1,20 @@
 import { FormEvent, useState } from 'react';
+import { Socket } from 'socket.io-client';
 import Chat from '../../../services/chat';
 import './styles.scss';
 
-const ChatInput = () => {
+interface props {
+  socket:Socket;
+}
+
+const ChatInput = (props:props) => {
   const [guess, setGuess] = useState('');
 
   function send(e:FormEvent) {
     e.preventDefault();
     const chat = new Chat();
-    chat.send(guess);
+    props.socket.emit('guess', guess);
+    chat.sendGuess(guess, "Você: ");
     setGuess('');
   }
 

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { Socket } from 'socket.io-client';
 import ChatInput from '../ChatInput/Index';
+import { Socket } from 'socket.io-client';
 import Chat from '../../../services/chat';
+import { useEffect } from 'react';
 import './styles.scss';
 
 interface props {
@@ -15,12 +15,17 @@ const ChatContainer = (props:props) => {
     props.socket.on('new_player_joined', (message) => {
       chat.sendGameMessage(message, 'blue');
     });
+
+    props.socket.on('player_send_a_guess', (player) => {
+      const whoSentTheMessage = `${player.username}: `;
+      chat.sendGuess(player.guess, whoSentTheMessage);
+    });
   }, []);
 
   return (
     <div id="chat-container">
       <div id="chat" />
-      <ChatInput />
+      <ChatInput socket={ props.socket }/>
     </div>
   );
 };

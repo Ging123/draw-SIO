@@ -12,13 +12,13 @@ async function joinARoom(socket:socket) {
 async function connectPlayerToRoom(socket:socket, roomToConnect:any) {
   const user = socket.data;
   await room.addNewPlayer(roomToConnect, user.username);
-  await joinRoomInSocket(socket, roomToConnect._id);
+  return await joinRoomInSocket(socket, roomToConnect._id);
 }
 
 async function createNewRoom(socket:socket) {
   const user = socket.data;
   const createdRoom = await room.create(user.username);
-  await joinRoomInSocket(socket, createdRoom._id);
+  return await joinRoomInSocket(socket, createdRoom._id);
 }
 
 async function joinRoomInSocket(socket:socket, roomId:any) {
@@ -27,6 +27,7 @@ async function joinRoomInSocket(socket:socket, roomId:any) {
   const playerJoinMessage = `${user.username} entrou no jogo`;
   await socket.join(roomId);
   socket.broadcast.to(roomId).emit("new_player_joined", playerJoinMessage);
+  return roomId;
 }
 
 export default joinARoom;
