@@ -8,6 +8,7 @@ async function socketAuth(socket:any, next:(err?:any) => void) {
     const sentToken = socket.handshake.auth.token;
     const userFound = await user.findUserByToken(sentToken);
     socket.data = {
+      _id:userFound._id,
       email:userFound.email,
       username:userFound.username
     };

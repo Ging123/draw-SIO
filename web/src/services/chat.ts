@@ -26,10 +26,20 @@ class Chat {
     return guessContainer;
   }
 
-  private setMessageBackground(guessMessage:HTMLDivElement) {
+  private setMessageBackground(message:HTMLDivElement) {
     const quantityOfMessages = document.querySelectorAll('#chat > .message').length;
     const numberOfMessagesIsEven = quantityOfMessages % 2 === 0;
-    if(numberOfMessagesIsEven) guessMessage.style.background = '#f3f3f3'; 
+    if(numberOfMessagesIsEven) message.style.background = '#f3f3f3'; 
+  }
+
+  public sendGameMessage(message:string, color='black') {
+    const chat = document.getElementById('chat')!;
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = message;
+    messageDiv.className = 'message';
+    messageDiv.style.color = color;
+    this.setMessageBackground(messageDiv);
+    chat.appendChild(messageDiv);
   }
 }
 

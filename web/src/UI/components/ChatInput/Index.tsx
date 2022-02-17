@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import Chat from './chat';
+import Chat from '../../../services/chat';
 import './styles.scss';
 
 const ChatInput = () => {

@@ -9,7 +9,7 @@ class Jwt {
     this.secretKeyOfToken = secretKeyOfToken;
   }
 
-  public create(data:object, expireIn='10s') {
+  public create(data:object, expireIn='60m') {
     const expireTime = { expiresIn:expireIn };
     const token = jwt.sign(data, this.secretKeyOfToken, expireTime);
     return token;

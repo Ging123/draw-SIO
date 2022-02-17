@@ -7,11 +7,23 @@ class Cache {
   });
 
   public async connect() {
-    await this.client.connect();
+    try {
+      await this.client.connect();
+    } 
+    catch(err) {
+      //console.log(err);
+      return err;
+    }
   }
 
   public async quit() {
-    await this.client.quit();
+    try {
+      await this.client.quit();
+    }
+    catch(err) {
+      //console.log(err);
+      return err;
+    }
   }
 
   public async set(key:string, value:object) {

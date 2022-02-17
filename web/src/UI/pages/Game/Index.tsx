@@ -1,8 +1,8 @@
 import PlayersBar from "../../components/PlayersBar/Index";
 import LocalStorage from "../../../services/localstorage";
+import ChatContainer from "../../components/Chat/Index";
 import DrawArea from "../../components/DrawArea/Index";
 import Wrapper from "../../components/Wrapper/Index";
-import Chat from "../../components/Chat/Index";
 import { useEffect, useState } from "react";
 import Io from "../../../services/io";
 import config from "../../../config";
@@ -18,14 +18,14 @@ const Game = () => {
       console.log(err);
     });
 
-    socket.emit("join_to_chat");
+    socket.emit("connect_to_a_room");
   }, []);
 
   return (
     <Wrapper id="game-page-wrapper">
       <PlayersBar/>
       <DrawArea/>
-      <Chat/>
+      <ChatContainer socket={ socket }/>
     </Wrapper>
   );
 };

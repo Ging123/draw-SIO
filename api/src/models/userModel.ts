@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Jwt from '../externals/jwt';
 const Schema = mongoose.Schema;
 
 export interface user {
@@ -31,9 +30,6 @@ class UserModel {
       required:true,
       maxlength:100
     },
-    profile_photo: {
-      type:String
-    },
     token: {
       type:String
     },
@@ -47,7 +43,6 @@ class UserModel {
   protected createUser(userData:object, confirmation_code:string) {
     return new this.userModel({
       ...userData,
-      profile_photo:'',
       token:'',
       confirmation_code:confirmation_code
     });

@@ -9,8 +9,7 @@ route.get('/', authUser, async (req:any, res) => {
     const userData = {
       _id:req.user._id,
       email:req.user.email,
-      username:req.user.username,
-      profile_photo:req.user.profile_photo
+      username:req.user.username
     }
     res.status(200).json(userData);
   }
