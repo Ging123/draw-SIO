@@ -1,14 +1,22 @@
-import { useEffect, useRef } from 'react';
-import Drawer from './draw';
+import { useEffect, useRef, useState } from 'react';
+import { Socket } from 'socket.io-client';
+import Drawer from '../../../services/draw';
 import './styles.scss';
 
-const DrawArea = () => {
+interface props {
+  socket:Socket;
+}
+
+const DrawArea = (props:props) => {
   const canvasRef = useRef<any>();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const drawer = new Drawer(canvas);
-    drawer.setDraw();
+
+    props.socket.on("draw_time", () => {
+      drawer.setDraw();
+    });
   }, []);
 
   return ( 

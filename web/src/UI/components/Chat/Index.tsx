@@ -1,7 +1,7 @@
 import ChatInput from '../ChatInput/Index';
 import { Socket } from 'socket.io-client';
 import Chat from '../../../services/chat';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.scss';
 
 interface props {
@@ -10,6 +10,7 @@ interface props {
 
 const ChatContainer = (props:props) => {
   const chat = new Chat();
+  const [ answer, setAnswer ] = useState("");
 
   useEffect(() => {
     props.socket.on('new_player_joined', (message) => {
@@ -23,13 +24,22 @@ const ChatContainer = (props:props) => {
 
     props.socket.on('player_exist', (message) => {
       chat.sendGameMessage(message, 'red');
-    })
+    });
+    
+    props.socket.on("draw_time", (whatShouldBeDraw:string) => {
+      setAnswer(whatShouldBeDraw);
+      setTimeout(() => setAnswer(""), 5000);
+      document.title = `Você deve desenhar: ${whatShouldBeDraw}`;
+    });
   }, []);
 
   return (
     <div id="chat-container">
       <div id="chat" />
       <ChatInput socket={ props.socket }/>
+      {answer && 
+        <div className="answer-box">{ answer }</div>  
+      }
     </div>
   );
 };
