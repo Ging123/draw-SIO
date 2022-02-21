@@ -11,6 +11,10 @@ class LocalStorage {
     if(dataInString) data = JSON.parse(dataInString);
     return data;
   }
+  
+  public remove(key:string) {
+    localStorage.removeItem(key);
+  }
 }
 
 export default LocalStorage;

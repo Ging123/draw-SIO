@@ -26,7 +26,7 @@ class Cache {
     }
   }
 
-  public async set(key:string, value:object) {
+  public async set(key:string, value:any) {
     const valueInString = JSON.stringify(value);
     await this.client.set(key, valueInString);
   }

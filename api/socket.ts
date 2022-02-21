@@ -1,27 +1,27 @@
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import disconectFromRoom from './src/events/room/disconnect';
+import onDisconnect from './src/events/room/onDisconnect';
 import socketAuth from "./src/middlewares/socketAuth";
-import sendGuess from "./src/events/guess/send";
-import joinARoom from "./src/events/room/join";
+import onSendGuess from "./src/events/guess/send";
+import onJoin from "./src/events/room/onJoin";
 import { Server, Socket } from "socket.io";
 import onRoundEnd from "./src/events/round/onRoundEnd";
+import onDrawing from "./src/events/draw/onDrawing";
 
 export type io = Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>; 
 export type socket = Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
-
-var roomId:string;
-var whoIsDrawing:string;
 
 module.exports = (io:io) => {
   io.use(socketAuth);
 
   io.sockets.on('connection', (socket) => {
-    socket.on('connect_to_a_room', async () => roomId = await joinARoom(socket, io));
+    socket.on('connect_to_a_room', async () => await onJoin(socket, io));
     
-    socket.on('guess', async (guess) => await sendGuess(socket, roomId, guess));
+    socket.on('guess', async (guess) => await onSendGuess(socket, guess));
 
-    socket.on('round_end', async () => await onRoundEnd(socket, roomId, io));
+    socket.on('round_end', async () => await onRoundEnd(socket, io));
 
-    socket.on('disconnect', async () => await disconectFromRoom(socket, roomId));
+    socket.on('drawing', async (data) => await  onDrawing(socket, data));
+
+    socket.on('disconnect', async () => await onDisconnect(socket));
   });
 }; 

@@ -3,6 +3,7 @@ import { Socket } from 'socket.io-client';
 import Chat from '../../../services/chat';
 import { useEffect, useState } from 'react';
 import './styles.scss';
+import { drawTime } from '../DrawArea/Index';
 
 interface props {
   socket:Socket;
@@ -26,10 +27,10 @@ const ChatContainer = (props:props) => {
       chat.sendGameMessage(message, 'red');
     });
     
-    props.socket.on("draw_time", (whatShouldBeDraw:string) => {
-      setAnswer(whatShouldBeDraw);
+    props.socket.on("draw_time", (data:drawTime) => {
+      setAnswer(data.answer);
       setTimeout(() => setAnswer(""), 5000);
-      document.title = `Você deve desenhar: ${whatShouldBeDraw}`;
+      document.title = `Você deve desenhar: ${data.answer}`;
     });
   }, []);
 
