@@ -1,5 +1,16 @@
 #players-bar {
   border:1px solid black;
-  flex-grow:1;
   overflow-y:scroll;
+  width:280px;
+}
+
+@media (max-width:1250px) {
+  #players-bar {
+    display:block;
+    bottom:0px;
+    height:40vh;
+    position:fixed;
+    right:0px;
+    width:50%;
+  }
 }

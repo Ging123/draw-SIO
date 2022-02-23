@@ -23,8 +23,6 @@ class Drawer {
     this.canvas = canvas;
     this.socket = socket;
     this.tokenToDraw = tokenToDraw;
-    this.canvas.width = 700;
-    this.canvas.height = 500;
     this.ctx = this.canvas.getContext('2d');
   }
 
@@ -88,7 +86,7 @@ class Drawer {
     for(let i = lastDrawedIndex; i < draw.line.length; i++) {
       const line = draw.line[i];
       const mustStopDrawLine = line.stopDraw;
-      console.log(line)
+      
       if(!mustStopDrawLine) {
         this.ctx.lineWidth = this.lineWidth;
         this.ctx.lineCap = this.lineCap;

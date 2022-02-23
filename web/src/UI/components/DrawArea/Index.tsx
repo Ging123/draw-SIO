@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import Drawer from '../../../services/draw';
 import LocalStorage from '../../../services/localstorage';
+import setCanvasSize from './setCanvasSize';
 import './styles.scss';
 
 interface props {
@@ -16,6 +17,7 @@ export interface drawTime {
 const DrawArea = (props:props) => {
   const canvasRef = useRef<any>();
   const localstroage = new LocalStorage();
+  const [ answer, setAnswer ] = useState("");
 
   useEffect(() => {
     localstroage.remove("lastDrawedIndex");
@@ -32,18 +34,38 @@ const DrawArea = (props:props) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const botDrawer = new Drawer(canvas, props.socket);
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
 
     props.socket.on("draw", (draw) => {
       botDrawer.drawOnCavas(draw);
     });
+
+    props.socket.on("draw_time", (data:drawTime) => {
+      setAnswer(data.answer);
+      setTimeout(() => {
+        const answerBox = document.getElementsByClassName('answer-box')[0];
+        if(answerBox) setAnswer("");
+      }, 5000);
+      document.title = `Você deve desenhar: ${data.answer}`;
+    });
+
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+    }
   }, [canvasRef])
 
   return ( 
-    <canvas 
-      id="draw-area" 
-      draggable="false" 
-      ref={ canvasRef }
-    />
+    <>
+      <canvas 
+        id="draw-area" 
+        draggable="false" 
+        ref={ canvasRef }
+      />
+      {answer && 
+        <div className="answer-box">{ answer }</div>  
+      }
+    </>
   ); 
 };
 

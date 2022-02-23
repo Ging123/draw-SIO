@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 
 class Io {
 
-  public connect(url:string, authToken:string) {
+  public set(url:string, authToken:string) {
     return io(url, {
       autoConnect:false,
       transports: ['websocket', 'polling', 'flashsocket'],

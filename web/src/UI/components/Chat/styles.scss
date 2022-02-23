@@ -1,8 +1,6 @@
-@import "../../styles/colors.scss";
-@import "../../styles/containers.scss";
-
 #chat-container {
   background:white;
+  border:1px solid gray;
   height:500px;
   width:350px;
 }
@@ -20,17 +18,13 @@
   word-wrap:break-word;
 }
 
-.answer-box {
-  @extend %align-x;
-  background:$dark-blue;
-  top:0px;
-  border-radius:6px;
-  color:white;
-  font: {
-    size:18px;
-    weight:600;
+@media (max-width:1250px) {
+  #chat-container {
+    display:block;
+    bottom:0px;
+    height:40vh;
+    left:0px;
+    position:fixed;
+    width:50%;
   }
-  padding:10px 15px;
-  position:absolute;
-  text-align:center;
 }
