@@ -1,0 +1,13 @@
+@import "../../../../styles/containers.scss";
+@import "../../../../styles/effects.scss";
+
+.tool-bar {
+  @include flex(row, space-between, center);
+  width:100%;
+
+  & > .icone {
+    @extend %light-blue-on-hover-or-click;
+    color:black;
+    font-size:18px;
+  }
+}

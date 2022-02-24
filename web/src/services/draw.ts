@@ -75,9 +75,13 @@ class Drawer {
   }
 
   private getMousePosition(e:MouseEvent) {
+    const container = document.getElementById('draw-area-wrapper')!;
+    const currentSize = window.innerWidth;
+    const sideMargins = currentSize > 1250 ? 15 : 0;
+
     return {
-      x:e.clientX - this.canvas.offsetLeft,
-      y:e.clientY - this.canvas.offsetTop
+      x:e.clientX - (container.offsetLeft + sideMargins),
+      y:e.clientY - container.offsetTop
     }
   }
   

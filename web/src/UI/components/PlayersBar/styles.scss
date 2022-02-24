@@ -1,7 +1,8 @@
 #players-bar {
   border:1px solid black;
+  height:99vh;
   overflow-y:scroll;
-  width:280px;
+  width:25%;
 }
 
 @media (max-width:1250px) {

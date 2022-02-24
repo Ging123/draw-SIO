@@ -19,3 +19,14 @@
     color:$light-blue;
   }
 }
+
+%less-opacity-on-hover-or-click {
+  &:hover {
+    cursor:pointer;
+    opacity:.8;
+  }
+
+  &:active {
+    opacity:.6;
+  }
+}

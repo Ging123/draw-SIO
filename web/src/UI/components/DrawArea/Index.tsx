@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import Drawer from '../../../services/draw';
 import LocalStorage from '../../../services/localstorage';
+import Wrapper from '../Wrapper/Index';
 import setCanvasSize from './setCanvasSize';
+import { FaPaintBrush } from 'react-icons/fa';
 import './styles.scss';
+import DrawOptions from '../DrawOptions/Index';
 
 interface props {
   socket:Socket;
@@ -18,6 +21,7 @@ const DrawArea = (props:props) => {
   const canvasRef = useRef<any>();
   const localstroage = new LocalStorage();
   const [ answer, setAnswer ] = useState("");
+  const [ drawOptionIsOpen, setDrawOptionVisibility ] = useState(false);
 
   useEffect(() => {
     localstroage.remove("lastDrawedIndex");
@@ -56,7 +60,7 @@ const DrawArea = (props:props) => {
   }, [canvasRef])
 
   return ( 
-    <>
+    <Wrapper id="draw-area-wrapper" position="relative">
       <canvas 
         id="draw-area" 
         draggable="false" 
@@ -65,7 +69,16 @@ const DrawArea = (props:props) => {
       {answer && 
         <div className="answer-box">{ answer }</div>  
       }
-    </>
+      <div 
+        className="draw-options-button" 
+        onClick={() => setDrawOptionVisibility(true)}
+      >
+        <FaPaintBrush className='icone' />
+      </div>
+      {drawOptionIsOpen && 
+        <DrawOptions close={() => setDrawOptionVisibility(false)}/>
+      }
+    </Wrapper>
   ); 
 };
 

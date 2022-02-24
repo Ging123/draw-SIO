@@ -7,17 +7,21 @@ interface props {
   height?:string;
   id?:string;
   justifyContent?:'center'|'left'|'right';
+  padding?:string;
+  position?:'absolute'|'fixed'|'relative';
   width?:string;
 }
 
 const Wrapper = (props:props) => {
   const styles = {
     alignItems:props.alignItems,
-    display:props.display || 'flex',
+    display:props.display,
     flexDirection:props.flexDirection,
     height:props.height,
     justifyContent:props.justifyContent,
-    width:props.width || '100%',
+    padding:props.padding,
+    position:props.position,
+    width:props.width,
   }
 
   return (

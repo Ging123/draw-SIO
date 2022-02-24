@@ -12,6 +12,7 @@ const EmailConfirmate = () => {
       flexDirection="column"
       height="100vh"
       justifyContent="center"
+      width='100%'
     >
       <Text 
         content="Quase Lá :)"

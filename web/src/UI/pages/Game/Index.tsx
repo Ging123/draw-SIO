@@ -42,7 +42,7 @@ const Game = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper display="flex" width="100%">
       <PlayersBar />
       <DrawArea socket={ socket }/>
       <ChatContainer socket={ socket }/>

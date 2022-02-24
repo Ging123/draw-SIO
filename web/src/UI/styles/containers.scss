@@ -18,6 +18,11 @@
   transform:translateX(-50%);
 }
 
+%align-y {
+  transform:translateY(-50%);
+  top:50%;
+}
+
 %flex-column, %flex-row {
   display:flex;
 }

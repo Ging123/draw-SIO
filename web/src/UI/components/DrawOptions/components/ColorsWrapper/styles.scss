@@ -1,0 +1,18 @@
+@import "../../../../styles/effects.scss";
+@import "../../../../styles/containers.scss";
+
+.colors-wrapper {
+  @include flex(row, center, center);
+  flex-flow:row wrap;
+  padding:30px 0px;
+}
+
+.color-container {
+  @extend %less-opacity-on-hover-or-click;
+  border:1px solid black;
+  border-radius:100px;
+  height:20px;
+  margin-right:10px;
+  margin-top:5px;
+  width:20px;
+}

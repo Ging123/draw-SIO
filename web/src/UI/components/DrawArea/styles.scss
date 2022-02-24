@@ -1,4 +1,5 @@
 @import "../../styles/colors.scss";
+@import "../../styles/effects.scss";
 @import "../../styles/containers.scss";
 
 #draw-area {
@@ -21,6 +22,22 @@
   padding:10px 15px;
   position:absolute;
   text-align:center;
+}
+
+.draw-options-button {
+  @extend %darker-on-hover-or-click;
+  background:$dark-blue;
+  border-radius:10px;
+  cursor:pointer;
+  left:30px;
+  padding:5px 10px;
+  position:absolute;
+  top:15px;
+
+  .icone {
+    color:white;
+    font-size:20px;
+  }
 }
 
 @media (max-width:1250px) {
