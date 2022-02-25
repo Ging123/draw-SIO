@@ -3,7 +3,7 @@ import createColor from './CreateColor';
 import "./styles.scss";
 
 interface props {
-  setColor:(color:string) => void;
+  setColor:React.Dispatch<React.SetStateAction<string>>;
   socket:Socket;
 }
 

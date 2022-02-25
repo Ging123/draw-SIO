@@ -13,15 +13,15 @@ interface props {
 const ToolBar = (props:props) => {
   return (
     <div className='tool-bar'>
-      <FaPencilAlt className="icone" />
-      <FaEraser className="icone" />
       <BsPaintBucket 
         className="icone"
-        onClick={() => fillDrawBackground(props.socket, props.color)} 
+        onClick={() => fillDrawBackground(props.socket, props.color)}
+        title="Pintar fundo" 
       />
       <FaTrash 
         className="icone" 
-        onClick={() => resetDraw(props.socket)} 
+        onClick={() => resetDraw(props.socket)}
+        title="Apagar desenho" 
       />
     </div>
   )

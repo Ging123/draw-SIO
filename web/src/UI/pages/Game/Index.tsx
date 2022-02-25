@@ -12,6 +12,7 @@ import config from "../../../config";
 
 const Game = () => {
   const navigate = useNavigate();
+  const localstorage = new LocalStorage();
   const goToLoginPage = () => navigate('/');
   const token = new LocalStorage().get('token');
   const io = new Io();
@@ -19,6 +20,7 @@ const Game = () => {
 
   useEffect(() => {
     socket.connect();
+    localstorage.remove('color');
 
     socket.on('connect_error', async (err:any) => {
       try {

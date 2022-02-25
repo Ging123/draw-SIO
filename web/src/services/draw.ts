@@ -9,6 +9,7 @@ interface draw {
 
 class Drawer {
 
+  private readonly localstorage = new LocalStorage();
   private canvas:any;
   private isDrawing = false;
   private ctx:CanvasRenderingContext2D;
@@ -16,9 +17,9 @@ class Drawer {
   public tokenToDraw:string;
   public lineCap:CanvasLineCap = 'round';
   public strokeStyle = 'black';
-  public lineWidth = 10;
+  public lineWidth = this.localstorage.get("pencil-size") || 5;
   private lineDrawed:linePosition[] = [];
-  private localstorage = new LocalStorage();
+  
 
   constructor(socket:Socket, tokenToDraw='') {
     this.canvas = document.getElementsByTagName('canvas')[0];
@@ -132,6 +133,7 @@ class Drawer {
 
   public reset() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvas.style.background = "white";
   }
 
   public fillBackground(color="white") {

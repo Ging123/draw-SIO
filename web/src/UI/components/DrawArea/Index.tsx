@@ -65,6 +65,7 @@ const DrawArea = (props:props) => {
       <div 
         className="draw-options-button" 
         onClick={() => setDrawOptionVisibility(true)}
+        title="Ferramentas"
       >
         <FaPaintBrush className='icone' />
       </div>

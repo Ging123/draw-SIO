@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Socket } from "socket.io-client";
+import LocalStorage from "../../../services/localstorage";
 import Modal from "../Modal/Index";
 import ColorsWrapper from "./components/ColorsWrapper/Index";
 import SizeWrapper from "./components/SizeWrapper/Index";
@@ -12,7 +13,9 @@ interface props {
 }
 
 const DrawOptions = (props:props) => {
-  const [ color, setColor ] = useState("");
+  const localstorage = new LocalStorage()
+  const defaultColor:string = localstorage.get('color') || "black";
+  const [ color, setColor ] = useState(defaultColor);
 
   return (
     <div className="draw-option-wrapper">
@@ -21,10 +24,13 @@ const DrawOptions = (props:props) => {
         socket={ props.socket } 
       />
       <ColorsWrapper 
-        setColor={(selectedColor:string) => setColor(selectedColor)}
+        setColor={ setColor }
         socket={ props.socket } 
       />
-      <SizeWrapper />
+      <SizeWrapper 
+        color={ color }
+        socket={ props.socket }
+      />
       <Modal 
         background={ "#0000009a" } 
         onClick={ props.close } 
