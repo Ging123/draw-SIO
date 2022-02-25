@@ -15,12 +15,13 @@ class Drawer {
   private socket:Socket;
   public tokenToDraw:string;
   public lineCap:CanvasLineCap = 'round';
+  public strokeStyle = 'black';
   public lineWidth = 10;
   private lineDrawed:linePosition[] = [];
   private localstorage = new LocalStorage();
 
-  constructor(canvas:any, socket:Socket, tokenToDraw='') {
-    this.canvas = canvas;
+  constructor(socket:Socket, tokenToDraw='') {
+    this.canvas = document.getElementsByTagName('canvas')[0];
     this.socket = socket;
     this.tokenToDraw = tokenToDraw;
     this.ctx = this.canvas.getContext('2d');
@@ -44,10 +45,11 @@ class Drawer {
   private draw(e:MouseEvent) {
     const mouse = this.getMousePosition(e);
     if(!this.isDrawing) return;
-    if(!this.tokenToDraw) return;
 
     this.ctx.lineWidth = this.lineWidth;
     this.ctx.lineCap = this.lineCap;
+    this.ctx.strokeStyle = this.strokeStyle;
+
     this.ctx.lineTo(mouse.x, mouse.y);
     this.ctx.stroke();
     this.ctx.beginPath();
@@ -72,6 +74,16 @@ class Drawer {
     this.canvas.addEventListener('mousedown', () => this.startDraw());
     this.canvas.addEventListener('mouseup', () => this.endDraw());
     this.canvas.addEventListener('mousemove', (e:MouseEvent) => this.draw(e));
+  }
+
+  public removeDrawEvents() {
+    let cloneOfCanvas = this.canvas.cloneNode();
+    const ctx = cloneOfCanvas.getContext('2d');
+    ctx.drawImage(this.canvas, 0, 0);
+    this.canvas.after(cloneOfCanvas);
+    this.canvas.remove();
+    this.canvas = cloneOfCanvas;
+    this.ctx = ctx;
   }
 
   private getMousePosition(e:MouseEvent) {

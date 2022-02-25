@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import Modal from "../Modal/Index";
 import ColorsWrapper from "./components/ColorsWrapper/Index";
 import SizeWrapper from "./components/SizeWrapper/Index";
@@ -6,13 +7,14 @@ import "./styles.scss";
 
 interface props {
   close:() => void;
+  socket:Socket;
 }
 
 const DrawOptions = (props:props) => {
   return (
     <div className="draw-option-wrapper">
       <ToolBar />
-      <ColorsWrapper />
+      <ColorsWrapper socket={ props.socket } />
       <SizeWrapper />
       <Modal background={ "#0000009a" } onClick={ props.close } />
     </div>
