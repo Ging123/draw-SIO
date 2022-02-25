@@ -80,6 +80,7 @@ class Drawer {
     let cloneOfCanvas = this.canvas.cloneNode();
     const ctx = cloneOfCanvas.getContext('2d');
     ctx.drawImage(this.canvas, 0, 0);
+    
     this.canvas.after(cloneOfCanvas);
     this.canvas.remove();
     this.canvas = cloneOfCanvas;
@@ -127,6 +128,14 @@ class Drawer {
 
   private setLastDrawedIndex(lastDrawedIndex:number) {
     this.localstorage.set("lastDrawedIndex", lastDrawedIndex);
+  }
+
+  public reset() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  public fillBackground(color="white") {
+    this.canvas.style.background = color;
   }
 }
 

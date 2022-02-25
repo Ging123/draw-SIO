@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Socket } from "socket.io-client";
 import Modal from "../Modal/Index";
 import ColorsWrapper from "./components/ColorsWrapper/Index";
@@ -11,12 +12,23 @@ interface props {
 }
 
 const DrawOptions = (props:props) => {
+  const [ color, setColor ] = useState("");
+
   return (
     <div className="draw-option-wrapper">
-      <ToolBar />
-      <ColorsWrapper socket={ props.socket } />
+      <ToolBar 
+        color={ color }
+        socket={ props.socket } 
+      />
+      <ColorsWrapper 
+        setColor={(selectedColor:string) => setColor(selectedColor)}
+        socket={ props.socket } 
+      />
       <SizeWrapper />
-      <Modal background={ "#0000009a" } onClick={ props.close } />
+      <Modal 
+        background={ "#0000009a" } 
+        onClick={ props.close } 
+      />
     </div>
   );
 }

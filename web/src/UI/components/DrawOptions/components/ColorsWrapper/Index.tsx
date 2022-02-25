@@ -3,6 +3,7 @@ import createColor from './CreateColor';
 import "./styles.scss";
 
 interface props {
+  setColor:(color:string) => void;
   socket:Socket;
 }
 
@@ -15,7 +16,7 @@ const ColorsWrapper = (props:props) => {
 
   return (
     <div className="colors-wrapper">
-      { color.map((color, index) => createColor(color, index, socket)) }
+      { color.map((color, index) => createColor(color, index, socket, props.setColor)) }
     </div>
   );
 }
