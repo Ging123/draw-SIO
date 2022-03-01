@@ -1,96 +1,49 @@
-import RoomRepository from "../../repositories/roomRepository";
-import Cache from "../../externals/cache";
+import GetAFreeRoomUseCase from "../../use_cases/room/get_free_room/useCase";
+import AddPlayerToRoomUseCase from "../../use_cases/room/add_player/useCase";
+import CreateRoomUseCase from "../../use_cases/room/create/useCase";
+import { room } from "../../use_cases/room/base";
 import { io } from "../../../socket";
-import DateUtil from "../../util/date";
-import randomName from "../../util/randomName";
 import { Socket } from "socket.io";
-import Jwt from "../../externals/jwt";
+import { startCountTime } from "../util";
 
-const room = new RoomRepository();
-const cache = new Cache();
+const roomSearcher = new GetAFreeRoomUseCase();
+const room = new CreateRoomUseCase();
+const updater = new AddPlayerToRoomUseCase();
 
 async function onJoin(socket:Socket, io:io) {
-  await cache.connect()
-  let freeRoomFound = await room.getAFreeRoom();
-  if(!freeRoomFound) freeRoomFound = await createARoomInDbAndCache(socket);
-  else await addUserToRoomFound(freeRoomFound, socket.data.username);
-  await addPlayerDataInCache(socket, freeRoomFound);
-  await emitThatUserJoinToRoom(socket, io, freeRoomFound);
-  await cache.quit();
+  let freeRoom:any = await roomSearcher.getAFreeRoom();
+  const player = socket.data.username;
+  
+  if(!freeRoom) freeRoom = await room.create(player);
+  else await updater.addPlayerToRoom(freeRoom.id, player);
+
+  const thisIsTheOnlyPlayerInTheRoom = freeRoom;
+  await emmitThatPlayerJoinIn(socket, freeRoom.id, freeRoom);
+  if(thisIsTheOnlyPlayerInTheRoom) emmitAnswer(socket, io, freeRoom);
 }
 
-async function createARoomInDbAndCache(socket:Socket) {
-  const firstPlayer = socket.data.username;
-  const createdRoom = await createRoomInDb(firstPlayer);
-  await createRoomInCache(createdRoom);
-  return createdRoom;
-}
-
-async function createRoomInDb(firstPlayer:string) {
-  const createdRoom = await room.create(firstPlayer);
-  return createdRoom;
-}
-
-async function createRoomInCache(createdRoom:any) {
-  const date = new DateUtil();
-  const answer = randomName();
-  const roomId = createdRoom._id.toString();
-
-  const roomStatus = {
-    indexOfWhoWillDraw:0,
-    whoIsDrawing:createdRoom.players[0],
-    timeThatRoundStart:date.getCurrentTime(),
-    answer:answer,
-    quantityOfPlayers:1
-  }
-  await cache.set(`room-${roomId}`, roomStatus);
-}
-
-async function addUserToRoomFound(freeRoom:any, player:string) {
-  await room.addNewPlayer(freeRoom, player);
-  const roomId = freeRoom._id.toString();
-  const roomStatus = await cache.get(`room-${roomId}`);
-  roomStatus.quantityOfPlayers += 1;
-  await cache.set(`room-${roomId}`, roomStatus);
-}
-
-async function emitThatUserJoinToRoom(socket:Socket, io:io, freeRoom:any) {
-  const roomId = freeRoom._id.toString();
-  const user = socket.data;
-  const playerJoinMessage = `${user.username} entrou no jogo`;
+async function emmitThatPlayerJoinIn(socket:Socket, roomId:string, freeRoom:room) {
+  const player = socket.data.username;
+  const playerJoinMessage = `${player} entrou no jogo`;
+  const answer = freeRoom.answer;
 
   await socket.join(roomId);
-  await socket.join(user.username);
-  socket.broadcast.to(roomId).emit("new_player_joined", playerJoinMessage);
+  await socket.join(player);
 
-  await emitAnswerIfUserMustDraw(socket, io, freeRoom);
+  socket.data.score = 0;
+  socket.data.answer = answer;
+  socket.data.roomId = roomId;
+  socket.broadcast.to(roomId).emit('new_player_joined', playerJoinMessage);
 }
 
-async function emitAnswerIfUserMustDraw(socket:Socket, io:io, freeRoom:any) {
-  const thisUser = socket.data.username;
-  const roomId = freeRoom._id.toString();
-  const roomData = await cache.get(`room-${roomId}`);
-  const whoMustDraw = roomData.whoIsDrawing;
-  const answer = roomData.answer;
-  const data = { answer:answer, token:createDrawToken(roomId) };
-  
-  if(thisUser !== whoMustDraw) return; 
-  io.sockets.in(thisUser).emit("draw_time", data); 
-}
-
-function createDrawToken(roomId:string) {
-  const data = { id:roomId };
-  const expiredIn = "59s";
-  const jwt = new Jwt(process.env.JWT_TO_DRAW!);
-  const token = jwt.create(data, expiredIn);
-  return token;
-}
-
-async function addPlayerDataInCache(socket:Socket, roomThatUserIs:any) {
-  const roomId = roomThatUserIs._id.toString();
+function emmitAnswer(socket:Socket, io:io, roomData:room) {
   const player = socket.data.username;
-  const playerData = { roomId:roomId, points:0 };
-  await cache.set(`player-${player}`, playerData);
+  const answer = roomData.answer;
+
+  socket.data.isDrawing = true;
+  io.sockets.in(player).emit("draw_time", answer); 
+  
+  startCountTime(socket, roomData);
 }
 
 export default onJoin;

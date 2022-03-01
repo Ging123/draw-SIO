@@ -1,7 +1,7 @@
-import { FaPencilAlt, FaEraser, FaTrash } from "react-icons/fa";
 import fillDrawBackground from "./fillDrawBackground";
 import { BsPaintBucket } from "react-icons/bs";
 import { Socket } from "socket.io-client";
+import { FaTrash } from "react-icons/fa";
 import resetDraw from "./resetDraw";
 import "./styles.scss";
 
