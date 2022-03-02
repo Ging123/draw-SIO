@@ -12,8 +12,8 @@ const ChatContainer = (props:props) => {
   const chat = new Chat();
 
   useEffect(() => {
-    props.socket.on('new_player_joined', (message) => {
-      chat.sendGameMessage(message, 'blue');
+    props.socket.on('new_player_joined', (data) => {
+      chat.sendGameMessage(data.message, 'blue');
     });
 
     props.socket.on('player_send_a_guess', (player) => {
@@ -21,7 +21,8 @@ const ChatContainer = (props:props) => {
       chat.sendGuess(player.guess, whoSentTheMessage);
     });
 
-    props.socket.on('player_exist', (message) => {
+    props.socket.on('player_exist', (player) => {
+      const message = `${player} saiu da sala`;
       chat.sendGameMessage(message, 'red');
     });
   }, []);

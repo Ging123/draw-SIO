@@ -5,10 +5,10 @@ class AddPlayerToRoomUseCase extends Base {
   public async addPlayerToRoom(id:string, player:string) {
     await this.cache.connect();
     const room = await this.getRoom(id);
-    if(!room) return;
+    if(!room) return false;
 
     const alreadyHasThisPlayer = this.verifyIfAlreadyHasThisPlayer(room, player);
-    if(alreadyHasThisPlayer) return;
+    if(alreadyHasThisPlayer) return false;
 
     await this.addPlayerInTheRoom(room, player);
     await this.cache.quit();

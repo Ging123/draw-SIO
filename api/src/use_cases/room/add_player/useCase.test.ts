@@ -28,5 +28,5 @@ test("Test: add player to room", async () => {
 
 test("Test: Add player to a room that doesn't exists", async () => {
   const result = await room.addPlayerToRoom('aaa', 'kasdok');
-  expect(result).toBeUndefined();
+  expect(result).toBeFalsy();
 });

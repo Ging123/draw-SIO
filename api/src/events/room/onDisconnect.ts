@@ -16,8 +16,7 @@ async function onDisconnect(socket:Socket) {
 
 async function emitPlayerLeft(socket:Socket, roomId:string) {
   const player = socket.data.username;
-  const playerLeftTheGame = `${player} saiu da sala`;
-  socket.broadcast.to(roomId).emit("player_exist", playerLeftTheGame);
+  socket.broadcast.to(roomId).emit("player_exist", player);
 }
 
 export default onDisconnect;

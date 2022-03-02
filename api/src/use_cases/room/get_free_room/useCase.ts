@@ -5,6 +5,7 @@ class GetAFreeRoomUseCase extends Base {
   public async getAFreeRoom() {
     const rooms = await this.getAllRooms();
     if(!rooms) return await this.cache.quit();
+    if(rooms.length === 0) return await this.cache.quit();
     const freeRoom = await this.selectAFreeRoom(rooms);
     await this.cache.quit();
     return freeRoom;
@@ -19,8 +20,11 @@ class GetAFreeRoomUseCase extends Base {
   private async selectAFreeRoom(rooms:string[]) {
     for(const id of rooms) {
       const room = await this.getRoom(id);
-      const roomHaveFreeSpace = room.players.length < 10;
-      if(roomHaveFreeSpace) return room;
+      
+      if(room) {
+        const roomHaveFreeSpace = room.players.length < 10;
+        if(roomHaveFreeSpace) return room;
+      }
     }
   }
 }

@@ -45,7 +45,7 @@ const Game = () => {
 
   return (
     <Wrapper display="flex" width="100%">
-      <PlayersBar />
+      <PlayersBar socket={ socket }/>
       <DrawArea socket={ socket }/>
       <ChatContainer socket={ socket }/>
     </Wrapper>
