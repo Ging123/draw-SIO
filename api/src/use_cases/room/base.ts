@@ -5,6 +5,7 @@ export interface room {
   drawer:number;
   id:string; 
   players:string[];
+  roundStartTime?:number;
   roundStart:boolean;
 }
 

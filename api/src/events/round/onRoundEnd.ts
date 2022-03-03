@@ -17,7 +17,7 @@ async function onRoundEnd(socket:Socket, io:io) {
   emitNextRound(socket, roomData);
   emitAnswerIfPlayerMustDraw(socket, io, roundData);
 
-  startCountTime(socket, roomData);
+  await startCountTime(io, roomData);
 }
 
 function emitNextRound(socket:Socket, room:room) {

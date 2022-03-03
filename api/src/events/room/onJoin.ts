@@ -23,7 +23,7 @@ async function onJoin(socket:Socket, io:io) {
   else await updater.addPlayerToRoom(freeRoom.id, player);
   await emmitThatPlayerJoinIn(socket, freeRoom);
   emmitPlayersInTheRoom(socket, io, freeRoom);
-  if(thisPlayerCreateTheRoom) emmitAnswer(socket, io, freeRoom);
+  if(thisPlayerCreateTheRoom) await emmitAnswer(socket, io, freeRoom);
 }
 
 async function emmitThatPlayerJoinIn(socket:Socket, freeRoom:room) {
@@ -50,17 +50,19 @@ function emmitPlayersInTheRoom(socket:Socket, io:io, freeRoom:room) {
   const player = socket.data.username;
   const playersInTheRoom = freeRoom.players.filter((name) => name !== player);
   const whoIsDrawing = freeRoom.players[freeRoom.drawer];
+  const timeThatRoundStart = freeRoom.roundStartTime;
 
   const data = {
     clientUsername:player,
     players:playersInTheRoom,
-    whoIsDrawing:whoIsDrawing
+    whoIsDrawing:whoIsDrawing,
+    timeThatRoundStart:timeThatRoundStart
   }
 
   io.sockets.in(player).emit("you_has_join_a_room", data); 
 }
 
-function emmitAnswer(socket:Socket, io:io, roomData:room) {
+async function emmitAnswer(socket:Socket, io:io, roomData:room) {
   const player = socket.data.username;
   const answer = roomData.answer;
   const data = {
@@ -71,7 +73,7 @@ function emmitAnswer(socket:Socket, io:io, roomData:room) {
   socket.data.isDrawing = true;
   io.sockets.in(player).emit("draw_time", data); 
   
-  startCountTime(socket, roomData);
+  await startCountTime(io, roomData);
 }
 
 export default onJoin;

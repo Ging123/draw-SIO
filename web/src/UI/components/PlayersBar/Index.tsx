@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 import PlayerBar from './playerBar';
 import './styles.scss';

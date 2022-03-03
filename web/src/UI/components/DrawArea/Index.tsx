@@ -7,6 +7,7 @@ import setCanvasSize from './setCanvasSize';
 import { FaPaintBrush } from 'react-icons/fa';
 import './styles.scss';
 import DrawOptions from '../DrawOptions/Index';
+import Timer from './timer';
 
 interface props {
   socket:Socket;
@@ -40,11 +41,23 @@ const DrawArea = (props:props) => {
 
     props.socket.on("draw_time", (data) => {
       setAnswer(data.answer);
+      document.title = `Você deve desenhar: ${data.answer}`;
+      
       setTimeout(() => {
         const answerBox = document.getElementsByClassName('answer-box')[0];
         if(answerBox) setAnswer("");
       }, 5000);
-      document.title = `Você deve desenhar: ${answer}`;
+    });
+
+    props.socket.on('round_start', (timeThatRoundWasStarted) => {
+      const timer = new Timer();
+      timer.startCountRoundTime(timeThatRoundWasStarted);
+    });
+
+    props.socket.on('you_has_join_a_room', (round) => {
+      const timer = new Timer();
+      const timeThatRoundStart = round.timeThatRoundStart;
+      timer.startCountRoundTime(timeThatRoundStart);
     });
 
     return () => {
@@ -68,6 +81,7 @@ const DrawArea = (props:props) => {
       >
         <FaPaintBrush className='icone' />
       </div>
+      <div className="timer">...</div>
       {drawOptionIsOpen && 
         <DrawOptions 
           close={() => setDrawOptionVisibility(false)}
