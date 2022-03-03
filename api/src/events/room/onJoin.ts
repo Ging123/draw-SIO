@@ -47,19 +47,21 @@ async function emmitThatPlayerJoinIn(socket:Socket, freeRoom:room) {
 }
 
 function emmitPlayersInTheRoom(socket:Socket, io:io, freeRoom:room) {
-  const player = socket.data.username;
-  const playersInTheRoom = freeRoom.players.filter((name) => name !== player);
-  const whoIsDrawing = freeRoom.players[freeRoom.drawer];
+  const playerName = socket.data.username;
+  const playersInTheRoom = freeRoom.players.filter((player) => {
+    return player.username !== playerName
+  });
+  const whoIsDrawing = freeRoom.players[freeRoom.drawer].username;
   const timeThatRoundStart = freeRoom.roundStartTime;
 
   const data = {
-    clientUsername:player,
+    clientUsername:playerName,
     players:playersInTheRoom,
     whoIsDrawing:whoIsDrawing,
     timeThatRoundStart:timeThatRoundStart
   }
 
-  io.sockets.in(player).emit("you_has_join_a_room", data); 
+  io.sockets.in(playerName).emit("you_has_join_a_room", data); 
 }
 
 async function emmitAnswer(socket:Socket, io:io, roomData:room) {

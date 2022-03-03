@@ -12,30 +12,36 @@ const PlayersBar = (props:props) => {
   useEffect(() => {
     props.socket.on('you_has_join_a_room', (data) => {
       const username:string = data.clientUsername;
-      const players:string[] = data.players;
-      const player = new PlayerBar();
+      const players:any[] = data.players;
+      const bar = new PlayerBar();
       const whoIsDrawing = data.whoIsDrawing;
 
-      player.create('Você', `player-is-${username}`);
-      players.forEach((name) => player.create(name));
-      player.addPencilInWhoIsDrawing(whoIsDrawing);
+      bar.create('Você', 0, `player-is-${username}`);
+      players.forEach((player) => bar.create(player.username, player.score));
+      bar.addPencilInWhoIsDrawing(whoIsDrawing);
     });
 
     props.socket.on('new_player_joined', (data) => {
       const player = new PlayerBar();
       player.create(data.player);
-  });
+    });
 
-  props.socket.on('draw_time', (data) => {
-    const player = new PlayerBar();
-    const whoIsDrawing = data.drawer;
-    player.addPencilInWhoIsDrawing(whoIsDrawing);
-  });
+    props.socket.on('draw_time', (data) => {
+      const player = new PlayerBar();
+      const whoIsDrawing = data.drawer;
+      player.addPencilInWhoIsDrawing(whoIsDrawing);
+    });
 
-  props.socket.on('player_exist', (playerWhoLeft) => {
-    const player = new PlayerBar();
-    player.remove(playerWhoLeft);
-  });
+    props.socket.on('player_exist', (playerWhoLeft) => {
+      const player = new PlayerBar();
+      player.remove(playerWhoLeft);
+    });
+
+    props.socket.on('player_earn_score', (data) => {
+      const player = new PlayerBar();
+      player.updateScore(data.player, data.score);
+      player.updateScore(data.whoIsDrawing.username, data.whoIsDrawing.score);
+    });
   }, []);
 
   return (

@@ -1,10 +1,15 @@
 import Cache from "../../externals/cache";
 
+interface player {
+  username:string;
+  score:number;
+}
+
 export interface room {
   answer:string;
   drawer:number;
   id:string; 
-  players:string[];
+  players:player[];
   roundStartTime?:number;
   roundStart:boolean;
 }

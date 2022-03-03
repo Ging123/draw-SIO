@@ -8,7 +8,9 @@ class Chat {
   private createClientGuessIntoHisChat(guess:string, whoSentGuess:string) {
     const chat = document.getElementById('chat')!;
     const guessMessage = this.guessMessage(whoSentGuess, guess);
+
     chat.append(guessMessage);
+    chat.scrollTop = chat.scrollHeight;
   }
 
   private guessMessage(ownerOfTheMessage:string, guess:string) {
@@ -35,11 +37,14 @@ class Chat {
   public sendGameMessage(message:string, color='black') {
     const chat = document.getElementById('chat')!;
     const messageDiv = document.createElement('div');
+
     messageDiv.textContent = message;
     messageDiv.className = 'message';
     messageDiv.style.color = color;
+    
     this.setMessageBackground(messageDiv);
     chat.appendChild(messageDiv);
+    chat.scrollTop = chat.scrollHeight;
   }
 }
 

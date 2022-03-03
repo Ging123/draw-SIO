@@ -12,10 +12,12 @@ class RemovePlayerOfARoomUseCase extends Base {
     return updatedRoom;
   }
 
-  private async removePlayerOfTheRoom(room:room, playerRemove:string) {
+  private async removePlayerOfTheRoom(room:room, playerToRemove:string) {
     const oldLength = room.players.length;
     const oldPlayers = room.players;
-    const currentPlayers = oldPlayers.filter((name) => name !== playerRemove);
+    const currentPlayers = oldPlayers.filter((player) => {
+      return player.username !== playerToRemove}
+    );
 
     room.players = currentPlayers;
     const newLength = room.players.length;

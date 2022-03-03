@@ -18,6 +18,8 @@ const Game = () => {
   const io = new Io();
   const socket = io.set(config.apiUrl, token);
 
+  document.title = 'Tente adivinhar a resposta :)';
+
   useEffect(() => {
     socket.connect();
     localstorage.remove('color');
@@ -35,6 +37,8 @@ const Game = () => {
         goToLoginPage();
       }
     });
+
+    socket.on('round_end', () => document.title = 'Tente adivinhar a resposta :)');
 
     socket.emit("connect_to_a_room");
 

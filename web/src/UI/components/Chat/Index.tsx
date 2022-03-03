@@ -25,6 +25,11 @@ const ChatContainer = (props:props) => {
       const message = `${player} saiu da sala`;
       chat.sendGameMessage(message, 'red');
     });
+
+    props.socket.on('player_earn_score', (data) => {
+      const message = `${data.player} acertou`;
+      chat.sendGameMessage(message, 'green');
+    });
   }, []);
 
   return (

@@ -6,7 +6,7 @@ class PlayerBar {
 
   private readonly dom = new Dom();
 
-  public create(player:string, id?:string) {
+  public create(player:string, playerScore=0, id?:string) {
     const container = document.getElementById('players-bar-wrapper')!;
     const div = this.dom.createElements('div', 4);
     const classes = ['player-bar', 'player-data', 'player', 'score'];
@@ -15,7 +15,7 @@ class PlayerBar {
 
     playerBar.id = id;
     playerName.textContent = player;
-    score.textContent = '0 Pontos';
+    score.textContent = `${playerScore} Pontos`;
 
     this.dom.addClassToElements(div, classes); 
     this.dom.appendElementsToOther(playerData, [playerName, score]);
@@ -50,6 +50,13 @@ class PlayerBar {
     const playerWhoLeftContainer = document.getElementById(id);
     if(!playerWhoLeftContainer) return;
     playerWhoLeftContainer.remove();
+  }
+
+  public updateScore(player:string, score:number) {
+    const query = `#player-is-${player} > .player-data > .score`;
+    const scoreContainer = document.querySelector(query);
+    if(!scoreContainer) return;
+    scoreContainer.textContent = `${score} Pontos`;
   }
 }
 

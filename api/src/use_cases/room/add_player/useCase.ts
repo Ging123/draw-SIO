@@ -17,13 +17,13 @@ class AddPlayerToRoomUseCase extends Base {
 
   private verifyIfAlreadyHasThisPlayer(room:room, player:string) {
     for(const playerSaved of room.players) {
-      if(playerSaved === player) return true;
+      if(playerSaved.username === player) return true;
     }
     return false;
   }
 
   private async addPlayerInTheRoom(room:room, player:string) {
-    room.players.push(player);
+    room.players.push({ username:player, score:0 });
     await this.cache.set(`room-${room.id}`, room);
   }
 }

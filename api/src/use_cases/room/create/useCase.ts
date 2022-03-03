@@ -38,7 +38,7 @@ class CreateRoomUseCase extends Base {
       answer:randomName(),
       drawer:0,
       id:id, 
-      players:[ creator ],
+      players:[ { username:creator, score:0 } ],
       roundStart:false
     }
     await this.cache.set(`room-${id}`, roomData);
