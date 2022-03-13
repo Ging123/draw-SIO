@@ -15,7 +15,7 @@ const Routes = () => {
         <Route element={<SignUp/>} path="/signup"/>
         <Route element={<Home/>} path="/home"/>
         <Route element={<Game/>} path="/game"/>
-        <Route element={<EmailConfirmate/>} path='/email/confirmate' />
+        <Route element={<EmailConfirmate/>} path='/email/confirmate'/>
       </Endpoints>
     </Suspense>
   );

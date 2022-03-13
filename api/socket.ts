@@ -1,10 +1,10 @@
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import socketAuth from "./src/middlewares/socketAuth";
 import { Server, Socket } from "socket.io";
-import onDrawing from "./src/events/draw/onDrawing";
 import JoinRoomEvent from "./src/events/room/onJoin";
 import OnGuessEvent from "./src/events/guess/onSend";
 import OnDisconnectEvent from "./src/events/room/onDisconnect";
+import OnDrawEvent from "./src/events/draw/onDrawing";
 
 export type io = Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>; 
 export type socket = Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
@@ -23,7 +23,10 @@ module.exports = (io:io) => {
       await event.onSendGuess(guess);
     });
 
-    socket.on('drawing', async (canvas) => onDrawing(socket, canvas));
+    socket.on('drawing', async (draw) => {
+      const event = new OnDrawEvent(socket);
+      await event.onDraw(draw);
+    });
 
     socket.on('disconnect', async () => {
       const event = new OnDisconnectEvent(socket);

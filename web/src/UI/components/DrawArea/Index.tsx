@@ -26,17 +26,20 @@ const DrawArea = (props:props) => {
   useEffect(() => {
     localstroage.remove("lastDrawedIndex");
 
-    props.socket.on("draw_time", () => {
-      const drawer = new Drawer(props.socket);
-      drawer.setDraw();
-    });
-
     const botDrawer = new Drawer(props.socket);
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
+    props.socket.on("draw_time", () => {
+      botDrawer.setDraw();
+    });
+
     props.socket.on("draw", (draw) => {
       botDrawer.drawOnCavas(draw);
+    });
+
+    props.socket.on("new_player_joined", () => {
+      botDrawer.emitAllDraw();
     });
 
     props.socket.on("draw_time", (data) => {
@@ -60,6 +63,8 @@ const DrawArea = (props:props) => {
     });
 
     props.socket.on('new_round_start', (data) => {
+      botDrawer.reset(false);
+      botDrawer.removeDrawEvents();
       const roundStartTime = data.roundStartTime;
       const timer = new Timer();
       timer.startCountRoundTime(roundStartTime);

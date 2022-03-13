@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GetUserUseCase from "../../../domain/use_cases/user/get/useCase";
-import LocalStorage from "../../../services/localstorage";
 import PlayButton from "../../components/PlayButton/Index";
 import Text from "../../components/Text/Index";
 import './styles.scss';
