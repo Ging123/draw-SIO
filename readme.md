@@ -53,6 +53,7 @@ docker-composer up
 - Mongo
 - Docker
 - Jest
+- Socket.io
 
 ### Web
 
@@ -60,3 +61,4 @@ docker-composer up
 - Scss
 - Typescript
 - Docker
+- Socket.io client
