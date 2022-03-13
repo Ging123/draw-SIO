@@ -2,29 +2,25 @@ import Base, { room } from "../base";
 
 class AddPlayerToRoomUseCase extends Base {
 
-  public async addPlayerToRoom(id:string, player:string) {
+  public async addPlayer(player:string, roomId:string) {
     await this.cache.connect();
-    const room = await this.getRoom(id);
-    if(!room) return false;
-
-    const alreadyHasThisPlayer = this.verifyIfAlreadyHasThisPlayer(room, player);
-    if(alreadyHasThisPlayer) return false;
-
-    await this.addPlayerInTheRoom(room, player);
+    const room = await this.getRoom(roomId);
+    if(!room) return await this.cache.quit();
+    
+    this.addPlayerToRoom(room, player);
+    await this.saveRoom(room);
     await this.cache.quit();
-    return true;
+
+    return room;
   }
 
-  private verifyIfAlreadyHasThisPlayer(room:room, player:string) {
-    for(const playerSaved of room.players) {
-      if(playerSaved.username === player) return true;
-    }
-    return false;
-  }
 
-  private async addPlayerInTheRoom(room:room, player:string) {
-    room.players.push({ username:player, score:0 });
-    await this.cache.set(`room-${room.id}`, room);
+  private addPlayerToRoom(room:room, player:string) {
+    room.players.push({
+      username:player, 
+      score:0,
+      alreadyEarnScore:false
+    });
   }
 }
 

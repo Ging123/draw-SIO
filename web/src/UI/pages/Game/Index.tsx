@@ -34,11 +34,16 @@ const Game = () => {
         socket.connect();
       }
       catch(err) {
+        /*localstorage.remove('token');*/
         goToLoginPage();
       }
     });
 
-    socket.on('round_end', () => document.title = 'Tente adivinhar a resposta :)');
+    socket.on('new_round_start', () => document.title = 'Tente adivinhar a resposta :)');
+
+    socket.on("draw_time", (data) => {
+      document.title = `Você deve desenhar: ${data.answer}`;
+    });
 
     socket.emit("connect_to_a_room");
 

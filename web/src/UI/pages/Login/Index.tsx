@@ -2,9 +2,19 @@ import ForgotPasswordOrSignUp from "../../components/ForgotPasswordOrSignUp/Inde
 import LoginForm from "../../components/LoginForm/Index";
 import Text from "../../components/Text/Index";
 import Box from "../../components/Box/Index";
+import { useEffect } from "react";
+import LocalStorage from "../../../services/localstorage";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   document.title = 'Entrar';
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const localstorage = new LocalStorage();
+    const token = localstorage.get('token');
+    if(token) navigate('/home');
+  }, []);
 
   return (
     <Box>

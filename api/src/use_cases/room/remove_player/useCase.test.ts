@@ -1,37 +1,31 @@
 import Cache from "../../../externals/cache";
 import { room } from "../base";
 import CreateRoomUseCase from "../create/useCase";
-import RemovePlayerOfARoomUseCase from "./useCase";
+import RemovePlayerFromRoomUseCase from "./useCase";
 
-const room = new RemovePlayerOfARoomUseCase();
+const room = new RemovePlayerFromRoomUseCase();
 const cache = new Cache();
-const playerToTest = 'jack';
+const player = "jack";
 var roomForTest:room;
+
 
 beforeAll(async () => {
   await cache.connect();
-  const creator = new CreateRoomUseCase();
-  roomForTest = await creator.create(playerToTest);
+  const newRoom = new CreateRoomUseCase();
+  roomForTest = await newRoom.create(player);
 });
 
+
 afterAll(async () => {
-  await cache.deleteOne(`rooms`);
+  await cache.deleteOne("rooms");
   await cache.deleteOne(`room-${roomForTest.id}`);
   await cache.quit();
 });
 
-test("Test: Remove a player from room", async () => {
-  const result = await room.remove(roomForTest.id, playerToTest);
-  if(result) {
-    roomForTest = result;
-    expect(roomForTest.players.length).toBe(0);
-  }
-});
 
-test("test: Remove a player that is not in the room", async () => {
-  const result = await room.remove(roomForTest.id, playerToTest);
-  if(result) {
-    roomForTest = result;
-    expect(roomForTest.players.length).toBe(0);
-  }
+test("Test: Remove player from room", async () => {
+  const roomId = roomForTest.id;
+  const result = await room.removePlayer(player, roomId);
+  const quantityOfPlayers = result?.players.length;
+  expect(quantityOfPlayers).toBe(0);
 });

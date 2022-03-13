@@ -1,28 +1,36 @@
-import { Socket } from "socket.io";
-import { io } from "../../socket";
-import Cache from "../externals/cache";
-import { room } from "../use_cases/room/base";
-import SetRoundStatusUseCase from "../use_cases/room/set_round_status/useCase";
+import { room, player } from "../use_cases/room/base";
 
-const  cache = new Cache();
-
-export async function getRoom(id:string) {
-  await cache.connect();
-  const room = await cache.get(`room-${id}`);
-  await cache.quit();
-  return room;
+export function getWhoIsDrawingData(room:room) {
+  let index = 0;
+  for(const player of room.players) {
+    const thisPlayerIsDrawing = player.username === room.whoIsDrawing;
+    if(thisPlayerIsDrawing) return playerData(player, index);
+    index++;
+  }
 }
 
-export async function startCountTime(io:io, roomData:room) {
-  if(roomData.roundStart) return;
-  const oneMinute = 60000;
-  const round = new SetRoundStatusUseCase();
 
-  roomData = await round.setStatus(roomData, true);
-  io.sockets.in(roomData.id).emit('round_start', roomData.roundStartTime);
+function playerData(player:player, index:number) {
+  return {
+    data:player,
+    index:index
+  }
+}
 
-  setTimeout(async () => {
-    await round.setStatus(roomData, false);
-    io.sockets.in(roomData.id).emit('round_end');
-  }, oneMinute);
+
+export function allPlayersEarnScore(room:room) {
+  if(room.players.length === 1) return false;
+  
+  for(const player of room.players) {
+    const playerEarnScore = playerAlreadyEarnScore(room, player);
+    if(!playerEarnScore) return false;
+  }
+  return true;
+}
+
+
+function playerAlreadyEarnScore(room:room, player:player) {
+  const isDrawing = player.username === room.whoIsDrawing;
+  if(!isDrawing) return player.alreadyEarnScore;
+  return true;
 }

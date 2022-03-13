@@ -41,7 +41,6 @@ const DrawArea = (props:props) => {
 
     props.socket.on("draw_time", (data) => {
       setAnswer(data.answer);
-      document.title = `Você deve desenhar: ${data.answer}`;
       
       setTimeout(() => {
         const answerBox = document.getElementsByClassName('answer-box')[0];
@@ -58,6 +57,12 @@ const DrawArea = (props:props) => {
       const timer = new Timer();
       const timeThatRoundStart = round.timeThatRoundStart;
       timer.startCountRoundTime(timeThatRoundStart);
+    });
+
+    props.socket.on('new_round_start', (data) => {
+      const roundStartTime = data.roundStartTime;
+      const timer = new Timer();
+      timer.startCountRoundTime(roundStartTime);
     });
 
     return () => {

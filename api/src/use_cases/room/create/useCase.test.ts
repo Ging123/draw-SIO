@@ -1,26 +1,34 @@
 import Cache from "../../../externals/cache";
+import { room } from "../base";
 import CreateRoomUseCase from "./useCase";
 
 const room = new CreateRoomUseCase();
 const cache = new Cache();
-let id = '';
+const player = 'jack';
+var createdRoom:room;
+
 
 beforeAll(async () => {
   await cache.connect();
 });
 
+
 afterAll(async () => {
-  await cache.deleteOne(`room-${id}`);
   await cache.deleteOne('rooms');
+  await cache.deleteOne(`room-${createdRoom.id}`);
   await cache.quit();
 });
 
-test("Test: Create a new room", async () => {
-  id = (await room.create('Jack')).id;
-  expect(id).toBeTruthy();
-});
 
-test("Test: Verify if room created exists", async () => {
-  const roomCreated = await cache.get(`room-${id}`);
-  expect(roomCreated).toBeDefined();
+test("Test: Create room", async () => {
+  createdRoom = await room.create(player);
+  expect(createdRoom.answer).toBeTruthy();
+  expect(createdRoom.id).toBeTruthy();
+  expect(createdRoom.roundStartTime).toBeTruthy();
+
+  expect(createdRoom.whoIsDrawing).toBe(player);
+  expect(createdRoom.players[0].username).toBe(player);
+  expect(createdRoom.players[0].score).toBe(0);
+
+  expect(createdRoom.players[0].alreadyEarnScore).toBeFalsy();
 });

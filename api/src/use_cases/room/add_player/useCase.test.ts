@@ -4,29 +4,38 @@ import CreateRoomUseCase from "../create/useCase";
 import AddPlayerToRoomUseCase from "./useCase";
 
 const room = new AddPlayerToRoomUseCase();
-const newRoom = new CreateRoomUseCase();
 const cache = new Cache();
-var roomToTest:room;
+const player = 'assfd';
+var roomForTest:room;
+
 
 beforeAll(async () => {
   await cache.connect();
-  roomToTest = await newRoom.create('aasadsad');
+  const newRoom = new CreateRoomUseCase();
+  roomForTest = await newRoom.create(player);
 });
 
+
 afterAll(async () => {
-  await cache.deleteOne(`room-${roomToTest.id}`);
+  cache.deleteOne('rooms');
+  cache.deleteOne(`room-${roomForTest.id}`);
   await cache.quit();
 });
 
-test("Test: add player to room", async () => {
-  const id = roomToTest.id;
-  await room.addPlayerToRoom(id, 'kkkk');
-  roomToTest = await cache.get(`room-${id}`);
-  const quantityOfPlayers = roomToTest.players.length;
-  expect(quantityOfPlayers).toBe(2);
+
+test("Test: Add a player to a room", async () => {
+  const playerToAdd = 'asfasfas';
+  const roomId = roomForTest.id;
+  const updatedRoom = await room.addPlayer(playerToAdd, roomId);
+
+  if(!updatedRoom) return;
+  const players = updatedRoom.players;
+  expect(players[1].username).toBe(playerToAdd);
+  expect(players.length).toBe(2);
 });
 
-test("Test: Add player to a room that doesn't exists", async () => {
-  const result = await room.addPlayerToRoom('aaa', 'kasdok');
-  expect(result).toBeFalsy();
+
+test("Test: Add a player to a room that doesn't exist", async () => {
+  const updatedRoom = await room.addPlayer('jack', '');
+  expect(updatedRoom).toBeFalsy();
 });

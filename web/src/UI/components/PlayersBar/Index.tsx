@@ -40,7 +40,13 @@ const PlayersBar = (props:props) => {
     props.socket.on('player_earn_score', (data) => {
       const player = new PlayerBar();
       player.updateScore(data.player, data.score);
-      player.updateScore(data.whoIsDrawing.username, data.whoIsDrawing.score);
+      player.updateScore(data.whoIsDrawing.player, data.whoIsDrawing.score);
+    });
+
+    props.socket.on('new_round_start', (data) => {
+      const whoIsDrawing = data.whoIsDrawing;
+      const player = new PlayerBar();
+      player.addPencilInWhoIsDrawing(whoIsDrawing);
     });
   }, []);
 

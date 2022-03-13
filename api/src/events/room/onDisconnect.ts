@@ -1,22 +1,42 @@
+import RemovePlayerFromRoomUseCase from "../../use_cases/room/remove_player/useCase";
 import { Socket } from "socket.io";
-import RemovePlayerOfARoomUseCase from "../../use_cases/room/remove_player/useCase";
-import DeleteRoomUseCase from "../../use_cases/room/delete/useCase";
 
-async function onDisconnect(socket:Socket) {
-  const player = new RemovePlayerOfARoomUseCase();
-  const emptyRoom = new DeleteRoomUseCase()
-  const playerName = socket.data.username;
-  const roomId = socket.data.roomId;
-  const room = await player.remove(roomId, playerName);
+class OnDisconnectEvent {
 
-  if(!room) return;
-  if(room.players.length === 0) return await emptyRoom.delete(room.id);
-  await emitPlayerLeft(socket, roomId);
+  private socket:Socket;
+  private player:string;
+  private roomId:string;
+
+
+  constructor(socket:Socket) {
+    this.socket = socket;
+    this.player = socket.data.username;
+    this.roomId = socket.data.roomId;
+  }
+
+
+  public async onDisconnect() {
+    await this.socketDisconnectFromRooms();
+    await this.removePlayerFromCache();
+    this.emitThatPlayerHasLeft();
+  }
+
+
+  private async socketDisconnectFromRooms() {
+    await this.socket.leave(this.roomId);
+    await this.socket.leave(this.player);
+  }
+
+  
+  private async removePlayerFromCache() {
+    const room = new RemovePlayerFromRoomUseCase();
+    await room.removePlayer(this.player, this.roomId);
+  }
+
+
+  private emitThatPlayerHasLeft() {
+    this.socket.broadcast.to(this.roomId).emit("player_exist", this.player);
+  }
 }
 
-async function emitPlayerLeft(socket:Socket, roomId:string) {
-  const player = socket.data.username;
-  socket.broadcast.to(roomId).emit("player_exist", player);
-}
-
-export default onDisconnect;
+export default OnDisconnectEvent;

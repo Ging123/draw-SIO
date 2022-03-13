@@ -1,60 +1,45 @@
+import randomName from "../../../util/randomName";
+import Base, { player, room } from "../base";
 import { v4 as uuidv4 } from 'uuid';
-import randomName from '../../../util/randomName';
-import Base from '../base';
 
 class CreateRoomUseCase extends Base {
 
-  public async create(creator:string) {
-    await this.cache.connect();
-    const id = await this.createAnId();
-    const room = await this.createRoom(id, creator);
-
-    await this.saveRoomId(id);
-    await this.cache.quit();
+  public async create(firstPlayer:string) {
+    const player = this.playerDataToCreate(firstPlayer);
+    const room = this.createRoom(player);
+    await this.saveCreatedRoom(room);
     return room;
   }
 
-  private async createAnId() {
-    let id = '';
-    const idIsNotUnique = true;
 
-    while(idIsNotUnique) {
-      id = uuidv4();
-      const idIsUnique = await this.verifyIfIdIsUnique(id);
-      if(idIsUnique) break;
+  private playerDataToCreate(username:string):player {
+    return {
+      username:username,
+      score:0,
+      alreadyEarnScore:false
     }
-
-    return id;
   }
 
-  private async verifyIfIdIsUnique(id:string) {
-    const thisIdExists = await this.cache.get(`room-${id}`);
-    if(thisIdExists) return false;
-    return true;
-  }
 
-  private async createRoom(id:string, creator:string) {
-    const roomData = { 
+  private createRoom(player:player):room {
+    const timeThatRoomWasCreated = new Date().getTime();
+
+    return {
       answer:randomName(),
-      drawer:0,
-      id:id, 
-      players:[ { username:creator, score:0 } ],
-      roundStart:false
+      id: uuidv4(),
+      players: [ player ],
+      roundStartTime: timeThatRoomWasCreated,
+      whoIsDrawing: player.username,
+      nextToDraw:""
     }
-    await this.cache.set(`room-${id}`, roomData);
-    return roomData;
   }
-
-  private async saveRoomId(id:string) {
-    const roomIds:string[] = await this.getRoomIds();
-    roomIds.push(id);
-    await this.cache.set('rooms', roomIds);
-  }
-
-  private async getRoomIds() {
-    const roomIds = await this.cache.get('rooms');
-    if(roomIds) return roomIds;
-    return []; 
+  
+  
+  private async saveCreatedRoom(room:room) {
+    await this.cache.connect();
+    await this.saveRoom(room);
+    await this.saveRoomId(room.id);
+    await this.cache.quit();
   }
 }
 

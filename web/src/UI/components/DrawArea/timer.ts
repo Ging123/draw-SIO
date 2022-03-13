@@ -1,12 +1,26 @@
+import LocalStorage from "../../../services/localstorage";
+
 class Timer {
 
+  private readonly localstorage = new LocalStorage();
+
+
   public startCountRoundTime(timeThatRoundStart:number) {
+    this.deleteOldInterval();
     if(!timeThatRoundStart) return;
     const timeThatPass = this.getHowMuchTimeHasPassUntilNow(timeThatRoundStart);
-    const oneMinute = 60;
+    const oneMinute = 59;
     const time = oneMinute - timeThatPass;
     this.putTimeInThePage(time);
   }
+
+
+  private deleteOldInterval() {
+    const intervalId = this.localstorage.get("timer-interval");
+    if(!intervalId) return;
+    clearInterval(intervalId);
+  }
+
 
   private getHowMuchTimeHasPassUntilNow(time:number) {
     const currentTime = new Date();
@@ -15,6 +29,7 @@ class Timer {
     const secondsPass = Math.round(timeDifference);
     return secondsPass;
   }
+
 
   private putTimeInThePage(time:number) {
     const timer = document.getElementsByClassName('timer')[0];
@@ -26,6 +41,13 @@ class Timer {
 
       if(time < 0) clearInterval(interval);
     }, 1000);
+
+    this.saveInterval(interval);
+  }
+
+
+  private saveInterval(interval:NodeJS.Timer) {
+    this.localstorage.set("timer-interval", interval);
   }
 }
 

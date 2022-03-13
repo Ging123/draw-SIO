@@ -1,12 +1,7 @@
 import { Socket } from "socket.io";
 
 function onDrawing(socket:Socket, canvas:any) {
-  console.log(canvas)
-  const playerCanDraw = socket.data.isDrawing;
-  const roomId = socket.data.roomId;
-
-  if(!playerCanDraw) return;
-  socket.broadcast.to(roomId).emit("draw", canvas);
+  if(!socket.data.isDrawing) return;
 }
 
 export default onDrawing;

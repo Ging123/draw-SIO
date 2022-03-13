@@ -1,5 +1,6 @@
 require('dotenv').config();
 import connectToMoongo from './src/configs/moongose';
+import Cache from './src/externals/cache';
 import bodyParser from 'body-parser';
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -11,6 +12,7 @@ const app = express();
 const port = process.env.SERVER_PORT! || 8000;
 const server = createServer(app);
 const io = new Server(server);
+const cache = new Cache();
 
 require('./socket')(io);
  
@@ -25,6 +27,9 @@ app.use(routes);
   try {
     const message = `The server start in the port ${port}`;
     await connectToMoongo();
+    await cache.connect();
+    await cache.deleteAll();
+    await cache.quit();
     server.listen(port, () => console.log(message));
   }
   catch(err:unknown) {
