@@ -46,17 +46,17 @@ docker-composer up
 
 ### Api
 
-[-] Node js
-[-] Express js
-[-] Typescript
-[-] Redis
-[-] Mongo
-[-] Docker
-[-] Jest
+- Node js
+- Express js
+- Typescript
+- Redis
+- Mongo
+- Docker
+- Jest
 
 ### Web
 
-[-] React js
-[-] Scss
-[-] Typescript
-[-] Docker
+- React js
+- Scss
+- Typescript
+- Docker
