@@ -58,6 +58,18 @@ class Api {
     const data = { emailOrUsername:emailOrUsername };
     await axios.put(url, data, option);
   }
+
+  public async logout() {
+    const token = this.localstorage.get('token');
+    if(!token) throw 'Usuário não está logado';
+    const url = `${this.url}user/logout`;
+    const res = await axios.delete(url, {
+      withCredentials:true,
+      headers: { 'Authorization':token }
+    })
+    .catch((err) => { throw err.response.data });
+    return res;
+  }
 }
 
 export default Api;

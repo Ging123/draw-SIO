@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GetUserUseCase from "../../../domain/use_cases/user/get/useCase";
+import LocalStorage from "../../../services/localstorage";
+import ExitIcone from "../../components/ExitIcone/Index";
 import PlayButton from "../../components/PlayButton/Index";
 import Text from "../../components/Text/Index";
 import './styles.scss';
@@ -25,8 +27,8 @@ const Home = () => {
         setUserData(userFound);
       }
       catch(err) { 
-        /*const localstorage = new LocalStorage();
-        localstorage.remove('token');*/
+        const localstorage = new LocalStorage();
+        localstorage.remove('token');
         goToLoginPage();
       }
     })()
@@ -35,6 +37,7 @@ const Home = () => {
   return ( 
     <>
       { userData && 
+      <>
         <div id="home-page-wrapper">
           <Text
             content={ `Bem vindo ${userData.username}` }
@@ -45,6 +48,8 @@ const Home = () => {
           />
           <PlayButton />
         </div>
+        <ExitIcone/>
+      </>
       }
     </>
   );

@@ -34,7 +34,7 @@ const Game = () => {
         socket.connect();
       }
       catch(err) {
-        /*localstorage.remove('token');*/
+        localstorage.remove('token');
         goToLoginPage();
       }
     });

@@ -67,8 +67,9 @@ class UserRepository extends UserModel {
   }
 
   public async logout(user:any) {
+    const query = {email:user.email};
     user.token = '';
-    await user.save();
+    await this.userModel.updateOne({query, $set:{token:""}});
     return user;
   }
 
