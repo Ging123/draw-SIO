@@ -17,7 +17,6 @@ npm run start
 
 ### docker
 ```
-cd docker
 docker-composer up
 ```
 
@@ -38,7 +37,6 @@ npm run start
 
 ### docker
 ```
-cd docker
 docker-composer up
 ```
 
